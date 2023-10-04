@@ -1,7 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
+import Navbar from './Navbar';
 
 function App() {
+    return <Navbar />;
   return (
     <div className="App">
       <header className="App-header">
