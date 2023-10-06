@@ -1,24 +1,20 @@
-import './App.css';
-import Navbar from './Navbar';
-import Home from './Home';
-import Login from './Login';
+import Navbar from "./Navbar"
+import Home from "./Home"
+import Login from "./Login"
+import { Route, Routes } from "react-router-dom";
 
 function App() {
-    let component 
-    switch (window.location.pathname) {
-        case "/":
-            component = <Home />
-            break
-        case "/login":
-            component = <Login />
-            break
-    }
     return (
     <>
-        <Navbar />
-        <div class="container">{component}</div>
+      <Navbar />
+      <div className="container">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login/>} />
+        </Routes>
+      </div>
     </>
-    ) 
+  )
 }
 
 export default App;
