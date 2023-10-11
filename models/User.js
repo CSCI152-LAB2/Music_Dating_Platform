@@ -38,6 +38,12 @@ const User = new Schema({
     topArtist: {
         type: String,
         required: true
+    },
+    likedUsers: {
+        type: User
+    },
+    matchedUsers: {
+        type: User
     }
 })
 
