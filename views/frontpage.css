@@ -33,7 +33,7 @@ li {
 
 button {
     background-color: #7895CB;
-    border-radius: 15%;
+    border-radius: 8%;
     border: none;
     color: white;
     padding: 8px;
@@ -44,15 +44,20 @@ button {
     margin: 4px 2px;
 }
 
+.bodyStuff {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 10%;
+}
+
 .textbox {
-    position: relative;
-    top: 150px;
-    left: 44px;
     border: 1px solid #7895CB;
     background-color: #7895CB;
     width: 645px;
     height: 328px;
     box-shadow: 0px 4px 4px 0px #00000040;
+    margin-left: 5%;
 }
 
 .text {
@@ -64,16 +69,50 @@ button {
     text-align: center;
 }
 
-.bodyStuff {
+.imageDiv {
+    position: relative;
+    right: 5vw;
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
+
 }
 
 #topImage, #leftImage, #rightImage {
-    position: relative;
-    border-radius: 100%;
-    top: 250px;
-    right: 150px;
-    height: 100px;
-    width: 100px;
+    height: 250px;
+    width: 250px;
+}
+
+#topImage {
+    position: absolute;
+    right: 9.5vw;
+    z-index: 2;
+}
+
+#leftImage {
+    position: absolute;
+    top: 8vw;
+    right: 15vw;
+    z-index: 1;
+}
+
+#rightImage {
+    position: absolute;
+    top: 8vw;
+    right: 2vw;
+    z-index: 3;
+}
+
+.bottomSignup {
+    margin-top: 10vw;
+    display: flex;
+    justify-content: center;
+}
+
+#bottom-sign-up {
+    font-size: 32px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
 }
