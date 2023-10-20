@@ -1,0 +1,30 @@
+body {
+    margin: 0;
+    background-color: #C5DFF8;
+}
+
+nav {
+    padding: 0px;
+    background: #1F4172D4;
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo {
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 6px;
+}
+
+#logo {
+    justify-self: flex-start;
+    height: 54px;
+    width: 54px;
+}
+
+#Overlay {
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+    top: 25vh;
+}
