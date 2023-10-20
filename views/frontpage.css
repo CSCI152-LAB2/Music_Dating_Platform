@@ -1,0 +1,118 @@
+body {
+    margin: 0;
+    background-color: #C5DFF8;
+}
+
+nav {
+    padding: 0px;
+    background: #1F4172D4;
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo {
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+#logo {
+    justify-self: flex-start;
+    height: 54px;
+    width: 54px;
+}
+
+ul {
+    list-style-type: none;
+    display: flex;
+    padding-right: 20px;
+}
+
+li {
+    flex-direction: row;
+}
+
+button {
+    background-color: #7895CB;
+    border-radius: 8%;
+    border: none;
+    color: white;
+    padding: 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+}
+
+.bodyStuff {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 10%;
+}
+
+.textbox {
+    border: 1px solid #7895CB;
+    background-color: #7895CB;
+    width: 645px;
+    height: 328px;
+    box-shadow: 0px 4px 4px 0px #00000040;
+    margin-left: 5%;
+}
+
+.text {
+    font-family: 'Open Sans';
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 61px;
+    letter-spacing: 0em;
+    text-align: center;
+}
+
+.imageDiv {
+    position: relative;
+    right: 5vw;
+    display: flex;
+    flex-wrap: wrap;
+
+}
+
+#topImage, #leftImage, #rightImage {
+    height: 250px;
+    width: 250px;
+}
+
+#topImage {
+    position: absolute;
+    right: 9.5vw;
+    z-index: 2;
+}
+
+#leftImage {
+    position: absolute;
+    top: 8vw;
+    right: 15vw;
+    z-index: 1;
+}
+
+#rightImage {
+    position: absolute;
+    top: 8vw;
+    right: 2vw;
+    z-index: 3;
+}
+
+.bottomSignup {
+    margin-top: 10vw;
+    display: flex;
+    justify-content: center;
+}
+
+#bottom-sign-up {
+    font-size: 32px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
