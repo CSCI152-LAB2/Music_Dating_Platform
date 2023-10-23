@@ -6,6 +6,9 @@ const path = require('path');
 
 const loginUser = async (req, res) => {
     const { user, pwd } = req.body;
+    if (!user || !pwd) {
+        res.status(400).json({ "message": "Username or password required" });
+    }
     const person = User.findOne(user.username === User.username);
     if (person) {
         const verify = await bcrypt.compare(pwd, person.password);
@@ -17,3 +20,5 @@ const loginUser = async (req, res) => {
         res.status(401).json({ "message": "Username does not exist" });
     }
 }
+
+module.exports = loginUser;

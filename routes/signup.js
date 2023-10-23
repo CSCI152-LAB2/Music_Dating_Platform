@@ -7,6 +7,6 @@ router.get('^/$|/signup(.html)?', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'signup.html'));
 })
 
-router.post('^/$|/signup(.html)?', registerUser());
+router.post('^/$|/signup(.html)?', registerUser);
 
 module.exports = router;
