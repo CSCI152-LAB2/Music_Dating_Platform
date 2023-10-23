@@ -4,17 +4,17 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
 const registerUser = async (req, res) => {
-    const { user, pwd } = req.body;
-    if (!user || !pwd) { return res.status(400).json({ "message": "Username and password required" }); }
+    const { user, password } = req.body;
+    if (!user || !password) { return res.status(400).json({ "message": "Username and password required" }); }
 
     const checkForDuplicate = await User.findOne({ username: user }).exec();
     if (checkForDuplicate) { return res.status(409).json({ "message": "Error: An account has aready been created using this username" }); }
-    const hash = bcrypt.hash(pwd, 10);
+    const hash = bcrypt.hash(password, 10);
 
     try {
         const new_user = await User.create({
             "username": user,
-            "password": pwd
+            "password": password
         });
 
         const token = jwt.sign({ user: User.username }, process.env.SECRET_STR, {

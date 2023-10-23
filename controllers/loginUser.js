@@ -5,13 +5,13 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 
 const loginUser = async (req, res) => {
-    const { user, pwd } = req.body;
-    if (!user || !pwd) {
+    const { user, password } = req.body;
+    if (!user || !password) {
         res.status(400).json({ "message": "Username or password required" });
     }
     const person = User.findOne(user.username === User.username);
     if (person) {
-        const verify = await bcrypt.compare(pwd, person.password);
+        const verify = await bcrypt.compare(password, person.password);
         if (verify) {
             //Needs JWT logic
             res.json({ "Success": "User logged in" });
