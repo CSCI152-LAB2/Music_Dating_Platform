@@ -9,12 +9,15 @@ const loginUser = async (req, res) => {
     if (!user || !password) {
         res.status(400).json({ "message": "Username or password required" });
     }
-    const person = User.findOne(user.username === User.username);
+    const person = User.findOne(user === User.username);
     if (person) {
         const verify = await bcrypt.compare(password, person.password);
         if (verify) {
             //Needs JWT logic
-            res.json({ "Success": "User logged in" });
+            const token = jwt.sign({ user: User.username }, process.env.SECRET_STR, {
+                expiresIn: process.env.LOGIN_EXPIRES
+            });
+            res.json({ "Success": "User logged in", "token": token });
         } else res.status(401).json({ "message": "Password is incorrect" });
     } else {
         res.status(401).json({ "message": "Username does not exist" });

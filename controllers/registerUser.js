@@ -22,7 +22,7 @@ const registerUser = async (req, res) => {
         });
 
         console.log(new_user);
-        res.status(201).json({ "message": `New user ${user} created!` }, { "token": `${token}` });
+        res.status(201).json({ "message": `New user ${user} created!`, "token": `${token}` });
     } catch (err) {
         res.status(500).json({ "message": err.message });
     }
