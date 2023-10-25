@@ -15,12 +15,13 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use('/', require('./routes/index'));
 app.use('/login', require('./routes/login'));
-app.use('/home', require('./routes/mainpage'));
+/*app.use('/home', require('./routes/mainpage'));
 app.use('/messages', require('./routes/messages'));
 app.use('/onboarding', require('./routes/onboarding'));
 app.use('/profile', require('./routes/profilepage'));
 app.use('/settings', require('./routes/settings'));
 app.use('/signup', require('./routes/signup'));
+*/
 
 mongoose.connection.once('open', () => {
     console.log('connected to mongoDB');
@@ -28,3 +29,7 @@ mongoose.connection.once('open', () => {
         console.log(`server running on port: ${PORT}`);
     })
 })
+
+/*app.listen(PORT, () => {
+    console.log(`server running on port: ${PORT}`);
+})*/
