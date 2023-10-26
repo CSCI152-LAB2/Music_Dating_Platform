@@ -15,7 +15,7 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    firstname: {
+    /*firstname: {                                                  //commentted out for testing purposes
         type: String,
         required: true
     },
@@ -51,7 +51,7 @@ const userSchema = new Schema({
     },
     matchedUsers: {
         type: Number
-    }
+    }*/
 })
 
 module.exports = mongoose.model('User', userSchema);
