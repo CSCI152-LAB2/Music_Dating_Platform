@@ -4,26 +4,6 @@ const cookie = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 
-/*const loginUser = async (req, res) => {
-    const { username, password } = req.body;
-    if (!username || !password) {
-        res.status(400).json({ "message": "Username or password required" });
-    } else {
-        const person = User.findOne({ username: username }, '+password');
-        if (person) {
-            const verify = await bcrypt.compare(password, person.password);
-            if (verify) {
-                const token = jwt.sign({ user: User.username }, process.env.SECRET_STR, {
-                    expiresIn: process.env.LOGIN_EXPIRES
-                });
-                res.json({ "Success": "User logged in", "token": token, "User": person }); //User is sent in json response for testing. Should be removed in production
-            } else res.status(401).json({ "message": "Password is incorrect" });
-        } else {
-            res.status(401).json({ "message": "Username does not exist" });
-        }
-    }
-}*/
-
 const loginUser = async (req, res) => {
     const { username, password } = req.body;
 
