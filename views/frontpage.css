@@ -1,5 +1,12 @@
+@font-face {
+    font-family: 'Poppins';
+    src: url('path/to/your/font/Poppins-Regular.ttf') format('truetype');
+    /* You can include different font weights and formats here. */
+  }
+
 body {
     margin: 0;
+    height: 100vh;
     background: linear-gradient(180deg, #FF96A2 0%, rgba(255, 192, 200, 0.54) 99.99%, rgba(241, 180, 187, 0) 100%);
 }
 
@@ -11,7 +18,16 @@ nav {
 }
 
 .site-name {
-    justify-content: flex-start;
+    position: absolute;
+    top: -46px;
+    left: 70px;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 48px;
+    font-weight: 400;
+    letter-spacing: 0em;
+    text-align: center;
+
 }
 
 .buttons {
@@ -118,7 +134,7 @@ button {
     justify-content: center;
 }
 
-#bottom-sign-up {
+#bottom-sign-up-button {
     background: #3067B6;
     font-size: 32px;
 }
