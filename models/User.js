@@ -15,33 +15,26 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    /*firstname: {                                                  //commentted out for testing purposes
-        type: String,
-        required: true
+    firstname: {
+        type: String
     },
     lastname: {
-        type: String,
-        required: true
+        type: String
     },
     dob: {
-        type: Date,
-        required: true
+        type: Date
     },
     location: {
-        type: String,
-        required: true
+        type: String
     },
     sex: {
-        type: String,
-        required: true
+        type: String
     },
     topGenre: {
-        type: String,
-        required: true
+        type: String
     },
     topArtist: {
-        type: String,
-        required: true
+        type: String
     },
     userID: {
         type: Number
@@ -51,7 +44,7 @@ const userSchema = new Schema({
     },
     matchedUsers: {
         type: Number
-    }*/
+    }
 })
 
 module.exports = mongoose.model('User', userSchema);

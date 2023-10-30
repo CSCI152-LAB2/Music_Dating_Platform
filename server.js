@@ -23,7 +23,6 @@ app.use('/profile', require('./routes/profilepage'));
 app.use('/settings', require('./routes/settings'));
 */
 
-
 mongoose.connection.once('open', () => {
     console.log('connected to mongoDB');
     app.listen(PORT, () => {
