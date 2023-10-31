@@ -30,6 +30,9 @@ const userSchema = new Schema({
     sex: {
         type: String
     },
+    sexualPreference: {
+        type: String
+    },
     topGenre: {
         type: String
     },
