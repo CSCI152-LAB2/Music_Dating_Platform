@@ -7,8 +7,10 @@ const connectDB = require('./config/dbConnect');
 const mongoose = require('mongoose');
 const User = require('./models/User');
 const PORT = process.env.PORT || 5501;
+const { Server } = require('socket.io');
 
 connectDB();
+const io = new Server(app);
 
 app.use(express.json()) //parses the data in POST and PUT requests which allows us to extract information from the request body
 app.use(express.urlencoded({ extended: true }))
@@ -22,6 +24,10 @@ app.use('/onboarding', require('./routes/onboarding'));
 app.use('/profile', require('./routes/profilepage'));
 app.use('/settings', require('./routes/settings'));
 */
+
+io.on('connection', () => {
+    console.log('user connected');
+})
 
 mongoose.connection.once('open', () => {
     console.log('connected to mongoDB');
