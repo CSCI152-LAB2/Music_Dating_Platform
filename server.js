@@ -7,20 +7,30 @@ const connectDB = require('./config/dbConnect');
 const mongoose = require('mongoose');
 const User = require('./models/User');
 const PORT = process.env.PORT || 5501;
+//const http = require('http');
+//const { Server } = require('socket.io');            //IO package functions commented out until further notice
 
+//const server = http.createServer(app);
+//const io = new Server(server);
 connectDB();
 
 app.use(express.json()) //parses the data in POST and PUT requests which allows us to extract information from the request body
 app.use(express.urlencoded({ extended: true }))
 
 app.use('/', require('./routes/index'));
+app.use('/signup', require('./routes/signup'));
 app.use('/login', require('./routes/login'));
-app.use('/home', require('./routes/mainpage'));
+/*app.use('/home', require('./routes/mainpage'));
 app.use('/messages', require('./routes/messages'));
 app.use('/onboarding', require('./routes/onboarding'));
 app.use('/profile', require('./routes/profilepage'));
 app.use('/settings', require('./routes/settings'));
-app.use('/signup', require('./routes/signup'));
+*/
+
+/*io.on('connection', () => {
+    console.log('user connected');
+})
+*/
 
 mongoose.connection.once('open', () => {
     console.log('connected to mongoDB');
