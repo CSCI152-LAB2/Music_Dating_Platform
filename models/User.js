@@ -11,33 +11,33 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    firstname: {
+    email: {
         type: String,
         required: true
+    },
+    firstname: {
+        type: String
     },
     lastname: {
-        type: String,
-        required: true
+        type: String
     },
     dob: {
-        type: Date,
-        required: true
+        type: Date
     },
     location: {
-        type: String,
-        required: true
+        type: String
     },
     sex: {
-        type: String,
-        required: true
+        type: String
+    },
+    sexualPreference: {
+        type: String
     },
     topGenre: {
-        type: String,
-        required: true
+        type: String
     },
     topArtist: {
-        type: String,
-        required: true
+        type: String
     },
     userID: {
         type: Number
