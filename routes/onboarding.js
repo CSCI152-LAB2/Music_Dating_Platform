@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const onboarding = require('./../controllers/onboarding');
+const finishSignup = require('./../controllers/onboardingFunc');
+//const spotifyFunc = require()
 
 router.get('^/$|/onboarding(.html)?', (req, res) => {
-    res.send(path.join(__dirname, '..', 'views', 'onboarding.html'));
+    res.sendFile(path.join(__dirname, '..', 'views', 'onboarding.html'));
 })
 
-router.post('/onboarding(.html)', onboarding);
+router.post('^/$|/onboarding(.html)?', finishSignup);
 
 module.exports = router;

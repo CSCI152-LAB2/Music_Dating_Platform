@@ -35,10 +35,14 @@ const getTopArtists = async () => {
     );*/
 }
 
-const postTopGenre = (req, res) => {
+/*const postTopGenre = (req, res) => {
     for (var i = 0; i < genreArr.length; i++) {
 
     }
 }
 
+
 module.exports = { getTopArtists, postTopGenre };
+*/
+
+module.exports = getTopArtists;
