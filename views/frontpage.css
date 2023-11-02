@@ -1,13 +1,37 @@
+@font-face {
+    font-family: 'Poppins';
+    src: url('path/to/your/font/Poppins-Regular.ttf') format('truetype');
+    /* You can include different font weights and formats here. */
+  }
+
 body {
     margin: 0;
-    background-color: #C5DFF8;
+    height: 100vh;
+    background: linear-gradient(180deg, #FF96A2 0%, rgba(255, 192, 200, 0.54) 99.99%, rgba(241, 180, 187, 0) 100%);
 }
 
 nav {
     padding: 0px;
-    background: #1F4172D4;
+    background: #3067B6;
     display: flex;
     justify-content: space-between;
+}
+
+.site-name {
+    position: absolute;
+    top: -46px;
+    left: 70px;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 48px;
+    font-weight: 400;
+    letter-spacing: 0em;
+    text-align: center;
+
+}
+
+.buttons {
+    align-items: flex-end;
 }
 
 .logo {
@@ -53,7 +77,7 @@ button {
 
 .textbox {
     border: 1px solid #7895CB;
-    background-color: #7895CB;
+    background: #3067B6;
     width: 645px;
     height: 328px;
     box-shadow: 0px 4px 4px 0px #00000040;
@@ -61,12 +85,14 @@ button {
 }
 
 .text {
-    font-family: 'Open Sans';
-    font-size: 24px;
+    color: white;
+    font-family: Poppins;
+    font-size: 32px;
     font-weight: 400;
     line-height: 61px;
     letter-spacing: 0em;
     text-align: center;
+    text-shadow: 2px 3px 5px rgba(0,0,0,0.5);
 }
 
 .imageDiv {
@@ -108,7 +134,8 @@ button {
     justify-content: center;
 }
 
-#bottom-sign-up {
+#bottom-sign-up-button {
+    background: #3067B6;
     font-size: 32px;
 }
 
