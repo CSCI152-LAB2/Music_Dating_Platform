@@ -7,12 +7,14 @@ const connectDB = require('./config/dbConnect');
 const mongoose = require('mongoose');
 const User = require('./models/User');
 const PORT = process.env.PORT || 5501;
+const cors = require('cors');
 //const http = require('http');
 //const { Server } = require('socket.io');            //IO package functions commented out until further notice
 
 //const server = http.createServer(app);
 //const io = new Server(server);
 connectDB();
+app.use(cors());
 
 app.use(express.json()) //parses the data in POST and PUT requests which allows us to extract information from the request body
 app.use(express.urlencoded({ extended: true }))
