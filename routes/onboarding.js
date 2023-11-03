@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const finishSignup = require('./../controllers/onboardingFunc');
-//const spotifyFunc = require()
 
 router.get('^/$|/onboarding(.html)?', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'onboarding.html'));
