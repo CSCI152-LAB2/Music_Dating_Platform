@@ -24,7 +24,7 @@ app.use('/', require('./routes/index'));
 app.use('/signup', require('./routes/signup'));
 app.use('/login', require('./routes/login'));
 app.use('/onboarding', require('./routes/onboarding'));
-
+app.use('/main', require('./routes/mainpage'));
 
 /*io.on('connection', () => {
     console.log('user connected');
