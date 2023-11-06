@@ -1,6 +1,6 @@
 //import clientToken from '../config/spotifyClientToken.js';
 
-const topGenres = [];
+const totalGenres = [];
 
 function getTopArtists() {
     const clientId = 'f77cef6b629d48bbb0ba6bbbbff7d7d8';
@@ -23,31 +23,51 @@ function getAccessToken() {
     return null;
 }
 
-// Function used for taking the artist data
-
-const usersTopGenre = (artistGenre) => {
-    for (let i = 0; i < artistGenre.length; i++) {
-        topGenres.push(artistGenre[i]);
-    }
-}
-
 // After the user grants permission, you can use the access token to make API requests
 const accessToken = getAccessToken();
 
 if (accessToken) {
-    fetch('https://api.spotify.com/v1/me/top/artists', {
+    fetch('https://api.spotify.com/v1/me/top/artists?limit=15', {
         headers: {
             'Authorization': 'Bearer ' + accessToken,
         },
     })
         .then(response => response.json())
         .then(data => {
-            console.log('Top Genres');
+            //console.log('Top Genres');
             for (let i = 0; i < data.items.length; i++) {
                 const artistGenres = data.items[i].genres;
-                usersTopGenre(artistGenres);
+                totalGenres.push(artistGenres);
             }
-            console.log(topGenres); //used for testing purposes, will delete in production
+            usersTopGenre();
         })
         .catch(error => console.error('Error:', error));
+}
+
+// Function used for taking the artist data
+const usersTopGenre = () => {
+    function calculateGenreFrequency(totalGenres) {
+        const frequencyMap = {};
+
+
+        for (const genre of totalGenres.flat()) {
+            if (frequencyMap.hasOwnProperty(genre)) {
+                frequencyMap[genre]++;
+            } else {
+                frequencyMap[genre] = 1;
+            }
+        }
+
+        return frequencyMap;
+    }
+
+    function findMostFrequentGenres(frequencyMap, count) {
+        const sortedGenres = Object.keys(frequencyMap).sort((a, b) => frequencyMap[b] - frequencyMap[a]);
+        return sortedGenres.slice(0, count);
+    }
+
+    const genreFrequency = calculateGenreFrequency(totalGenres);
+
+    const mostFrequentGenre = findMostFrequentGenres(genreFrequency, 3);
+    console.log('Most Frequent Genre:', mostFrequentGenre);
 }
