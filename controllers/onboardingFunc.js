@@ -1,3 +1,4 @@
+import totalGenre from '../views/getSpotify'
 const User = require('./../models/User');
 const loginUser = require('./loginUser');
 const bcrypt = require('bcrypt');
@@ -10,7 +11,7 @@ const finishSignup = async (req, res) => {
         try {
             const findUser = await User.findOneAndUpdate(
                 { username: username },
-                { $set: { firstname, lastname, dob, location, sex, sexualPreference } },
+                { $set: { firstname, lastname, dob, location, sex, sexualPreference, topGenre } },
                 { new: true }
             );
 
