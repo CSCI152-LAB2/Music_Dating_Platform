@@ -1,17 +1,19 @@
-import totalGenre from '../views/getSpotify'
+//const totalGenres = require('../views/getSpotify');
 const User = require('./../models/User');
 const loginUser = require('./loginUser');
 const bcrypt = require('bcrypt');
 
 const finishSignup = async (req, res) => {
 
-    const { username, password, firstname, lastname, dob, location, sex, sexualPreference } = req.body;
+    //const { username, password, firstname, lastname, dob, location, sex, sexualPreference } = req.body;
+    const { topGenre, username, password, firstname, lastname, dob, location, sex, sexualPreference } = req.body.data;
     const loginResult = await loginUser(req, res);
     if (loginResult && loginResult.token) {
         try {
             const findUser = await User.findOneAndUpdate(
                 { username: username },
-                { $set: { firstname, lastname, dob, location, sex, sexualPreference, topGenre } },
+                //{ $set: { firstname, lastname, dob, location, sex, sexualPreference, topGenre } },
+                { $set: { topGenre, username, password, firstname, lastname, dob, location, sex, sexualPreference } },
                 { new: true }
             );
 

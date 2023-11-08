@@ -41,6 +41,9 @@ const userSchema = new Schema({
     },
     matchedUsers: {
         type: [Number]
+    },
+    profilePic: {
+        type: String
     }
 })
 
