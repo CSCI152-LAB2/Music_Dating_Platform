@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const User = require('./models/User');
 const PORT = process.env.PORT || 5501;
 const cors = require('cors');
+const io = require('socket.io')(process.env.PORT);
 //const http = require('http');
 //const { Server } = require('socket.io');            //IO package functions commented out until further notice
 
@@ -26,10 +27,10 @@ app.use('/login', require('./routes/login'));
 app.use('/onboarding', require('./routes/onboarding'));
 app.use('/main', require('./routes/mainpage'));
 
-/*io.on('connection', () => {
+io.on('connection', () => {
+    socket.emit('chat-message', 'Hello world');
     console.log('user connected');
 })
-*/
 
 mongoose.connection.once('open', () => {
     console.log('connected to mongoDB');

@@ -1,6 +1,7 @@
 //import clientToken from '../config/spotifyClientToken.js';
 
 const totalGenres = [];
+const mostFrequentGenre = [];
 
 function getTopArtists() {
     const clientId = 'f77cef6b629d48bbb0ba6bbbbff7d7d8';
@@ -68,6 +69,25 @@ const usersTopGenre = () => {
 
     const genreFrequency = calculateGenreFrequency(totalGenres);
 
-    const mostFrequentGenre = findMostFrequentGenres(genreFrequency, 3);
+    mostFrequentGenre = findMostFrequentGenres(genreFrequency, 3);
     console.log('Most Frequent Genre:', mostFrequentGenre);
+    sendDataToServer(mostFrequentGenre);
+}
+
+//
+const sendDataToServer = (mostFrequentGenre) => {
+    const topGenre = mostFrequentGenre;
+    fetch('/onboarding', {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: { topGenre } })
+        //body: JSON.stringify({ data: { topGenre, username, password, firstname, lastname, dob, location, sex, sexualPreference } })
+    })
+        .then(response => response.text())
+        .then(responseText => {
+            console.log(responseText);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
