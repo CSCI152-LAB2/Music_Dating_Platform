@@ -26,6 +26,7 @@ app.use('/signup', require('./routes/signup'));
 app.use('/login', require('./routes/login'));
 app.use('/onboarding', require('./routes/onboarding'));
 app.use('/main', require('./routes/mainpage'));
+app.use('/profile', require('./routes/profilepage'));
 
 io.on('connection', () => {
     socket.emit('chat-message', 'Hello world');
