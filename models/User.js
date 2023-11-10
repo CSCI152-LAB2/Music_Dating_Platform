@@ -43,7 +43,7 @@ const userSchema = new Schema({
         type: [Number]
     },
     profilePic: {
-        type: String
+        type: String,
     }
 })
 

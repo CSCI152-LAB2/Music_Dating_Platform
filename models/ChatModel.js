@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 
 const ChatModel = new Schema({
     chatName: {
-        type: String
+        type: String,
+        trim: true
     },
     users: [
         {
@@ -12,6 +13,10 @@ const ChatModel = new Schema({
             ref: 'User'
         }
     ],
+    latestMessage: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Message"
+    },
 },
     {
         timestamps: true,
