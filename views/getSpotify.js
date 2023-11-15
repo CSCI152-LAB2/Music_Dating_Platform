@@ -69,7 +69,7 @@ const usersTopGenre = () => {
 
     const genreFrequency = calculateGenreFrequency(totalGenres);
 
-    mostFrequentGenre = findMostFrequentGenres(genreFrequency, 3);
+    mostFrequentGenre = findMostFrequentGenres(genreFrequency, 1);
     console.log('Most Frequent Genre:', mostFrequentGenre);
     sendDataToServer(mostFrequentGenre);
 }
