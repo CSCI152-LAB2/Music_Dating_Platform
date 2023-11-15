@@ -71,12 +71,12 @@ const usersTopGenre = () => {
 
     mostFrequentGenre = findMostFrequentGenres(genreFrequency, 1);
     console.log('Most Frequent Genre:', mostFrequentGenre);
-    sendDataToServer(mostFrequentGenre);
+    sendDataToServer(mostFrequentGenre);    //mostFrequentGenre is an array, might change later
 }
 
 //
 const sendDataToServer = (mostFrequentGenre) => {
-    const topGenre = mostFrequentGenre;
+    const topGenre = mostFrequentGenre[0];
     fetch('/onboarding', {
         method: 'POST',
         headers: { "Content-Type": "application/json" },
