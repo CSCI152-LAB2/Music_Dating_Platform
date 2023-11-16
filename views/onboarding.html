@@ -7,6 +7,7 @@
     <title>Signup for Cadence</title>
     <link rel="stylesheet" href="login.css">
     <script src="getSpotify.js"></script>
+    <script src="onboarding.js" defer></script>
     <script src="backhome.js" defer></script>
 </head>
 
@@ -18,53 +19,52 @@
         </div>
     </nav>
     <div id="Overlay">
-        <form>
+        <form id="onboardingForm">
             <h2>What music genre are you into?</h2>
             <label for="Alternative">Alternative</label>
-            <input type="checkbox" name="Music Genre" id="Alternative" value="Alternative">
+            <input type="radio" name="Music Genre" id="Alternative" value="Alternative">
             <br>
             <label for="Blues">Blues</label>
-            <input type="checkbox" name="Music Genre" id="Blues" value="Blues">
+            <input type="radio" name="Music Genre" id="Blues" value="Blues">
             <br>
             <label for="Classical">Classical</label>
-            <input type="checkbox" name="Music Genre" id="Classical" value="Classical">
+            <input type="radio" name="Music Genre" id="Classical" value="Classical">
             <br>
             <label for="Country">Country</label>
-            <input type="checkbox" name="Music Genre" id="Country" value="Country">
+            <input type="radio" name="Music Genre" id="Country" value="Country">
             <br>
             <label for="Electronic">Electronic</label>
-            <input type="checkbox" name="Music Genre" id="Electronic" value="Electronic">
+            <input type="radio" name="Music Genre" id="Electronic" value="Electronic">
             <br>
             <label for="International">International</label>
-            <input type="checkbox" name="Music Genre" id="International" value="International">
+            <input type="radio" name="Music Genre" id="International" value="International">
             <br>
             <label for="Jazz">Jazz</label>
-            <input type="checkbox" name="Music Genre" id="Jazz" value="Jazz">
+            <input type="radio" name="Music Genre" id="Jazz" value="Jazz">
             <br>
             <label for="Latin">Latin</label>
-            <input type="checkbox" name="Music Genre" id="Latin" value="Latin">
+            <input type="radio" name="Music Genre" id="Latin" value="Latin">
             <br>
             <label for="Pop">Pop</label>
-            <input type="checkbox" name="Music Genre" id="Pop" value="Pop">
+            <input type="radio" name="Music Genre" id="Pop" value="Pop">
             <br>
             <label for="Rock">Rock</label>
-            <input type="checkbox" name="Music Genre" id="Rock" value="Rock">
+            <input type="radio" name="Music Genre" id="Rock" value="Rock">
             <br>
             <label for="R&B">R&B</label>
-            <input type="checkbox" name="Music Genre" id="R&B" value="R&B">
+            <input type="radio" name="Music Genre" id="R&B" value="R&B">
             <br>
             <label for="Rap">Rap</label>
-            <input type="checkbox" name="Music Genre" id="Rap" value="Rap">
+            <input type="radio" name="Music Genre" id="Rap" value="Rap">
             <br>
             <label for="Reggae">Reggae</label>
-            <input type="checkbox" name="Music Genre" id="Reggae" value="Reggae">
-            <br>
-            <br>
-            <input type="button" value="Link Spotify API" onclick="getTopArtists()">
+            <input type="radio" name="Music Genre" id="Reggae" value="Reggae">
             <br>
             <br>
             <input type="submit" value="Submit">
         </form>
+        </div>
+        <button type="button" id="spotifyLinkButton" onclick="getTopArtists()">Link Spotify API</button>
 </body>
 
 </html>
