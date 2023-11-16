@@ -34,13 +34,19 @@ const userSchema = new Schema({
         type: String
     },
     topGenre: {
-        type: [String]
+        type: String
     },
     likedUsers: {
-        type: [Number]
+        type: [String]
+    },
+    dislikedUsers: {
+        type: [String]
     },
     matchedUsers: {
-        type: [Number]
+        type: [String]
+    },
+    profilePic: {
+        type: String,
     }
 })
 
