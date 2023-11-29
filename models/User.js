@@ -46,7 +46,10 @@ const userSchema = new Schema({
         type: [String]
     },
     profilePic: {
-        type: String,
+        type: String
+    },
+    chats: {
+        type: mongoose.Schema.Types.ObjectId    //might need to implement this on the client side. Will look into it further
     }
 })
 
