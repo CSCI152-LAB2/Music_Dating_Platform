@@ -2,7 +2,7 @@ const submit_button = document.getElementById('submit-button');
 const username = document.getElementById('username');
 const password = document.getElementById('password');
 
-const baseURL = 'http://localhost:8383/login';
+const baseURL = 'http://localhost:5501/login';
 submit_button.addEventListener('click', postInfo);
 
 async function postInfo(e) {
