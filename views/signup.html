@@ -7,6 +7,7 @@
     <title>Signup for Cadence</title>
     <link rel="stylesheet" href="login.css">
     <script src="backhome.js" defer></script>
+    <script src="signup.js" defer></script>
 </head>
 
 <body>
@@ -16,22 +17,31 @@
         </div>
     </nav>
     <div id="Overlay">
-        <form>
+        <form id="signupform">
             <h1>Signup for Cadence</h1>
-            <label for="username">Username</label>
-            <input type="text" name="username" id="username" required pattern="[a-zA-Z0-9]" minlength="6" maxlength="20"
-                placeholder="Please enter a username...">
-            <p>Valid Characters: "a-z, A-Z, 0-9, @,!, #, $"</p>
-            <br>
-            <label for="email">Email</label>
-            <input type="text" name="email" id="email" required pattern="[a-zA-Z0-9]@" placeholder="Please enter your email...">
-            <label for="password">Password</label>
-            <input type="text" name="password" id="password" required pattern="[a-zA-Z0-9]!@#$_" minlength="8"
+            <label for="username">Username: </label>
+            <input type="text" name="username" id="username" minlength="6" maxlength="20"
+                placeholder="Please enter a username..." required>
+            <br><br>
+            <label for="email">Email: </label>
+            <input type="text" name="email" id="email" placeholder="Please enter your email..." required>
+            <br><br>
+            <label for="password">Password: </label>
+            <input type="password" name="password" id="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" minlength="8"
                 maxlength="32" placeholder="Please enter a password...">
             <p>Valid Characters: "a-z, A-Z, 0-9, @,!, #, _, $"</p>
             <br>
-            <input type="submit" value="Submit">
+            <input type="submit" id='submit' value="Sign Up">
         </form>
+        <script>
+            document.getElementById('signupform').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const username = document.getElementById('username').value
+                const email = document.getElementById('email').value
+                const password = document.getElementById('password').value
+                signup(username, email, password);
+            });
+        </script>
     </section>
 </body>
 
