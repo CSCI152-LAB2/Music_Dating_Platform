@@ -7,7 +7,7 @@
     <title>Signup for Cadence</title>
     <link rel="stylesheet" href="login.css">
     <script src="backhome.js" defer></script>
-    <script src="signup.js"></script>
+    <script src="signup.js" defer></script>
 </head>
 
 <body>
@@ -31,7 +31,7 @@
                 maxlength="32" placeholder="Please enter a password...">
             <p>Valid Characters: "a-z, A-Z, 0-9, @,!, #, _, $"</p>
             <br>
-            <input type="submit" value="Sign Up">
+            <input type="submit" id='submit' value="Sign Up">
         </form>
         <script>
             document.getElementById('signupform').addEventListener('submit', function(event) {

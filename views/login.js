@@ -30,6 +30,7 @@ async function postInfo(e) {
 
         const data = await res.json();
         console.log(data);
+        window.location.href = "index.html";
         // Do something with the response data
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);

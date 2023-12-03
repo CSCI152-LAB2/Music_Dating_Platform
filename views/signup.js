@@ -1,33 +1,41 @@
-// This is the signup function that will be called when the user submits their form
-function signup(username, email, password) {
-    // Replace 'YOUR_ENDPOINT_URL' with the URL to which you want to post the data
-    const endpoint = 'YOUR_ENDPOINT_URL';
+const username = document.getElementById('username');
+const password = document.getElementById('password');
+const email = document.getElementById('email');
+const submit_button = document.getElementById('submit');
 
-    // Create the data object with the username and password
-    const data = {
-        username: username,
-        email: email,
-        password: password
-    };
+const baseURL = 'http://localhost:5501/signup';
+submit_button.addEventListener('click', postInfo);
 
-    // Use the fetch API to post the data to the server
-    fetch(endpoint, {
-        method: 'POST', // Specify the method to use
-        headers: {
-            'Content-Type': 'application/json', // Specify the content type as JSON
-        },
-        body: JSON.stringify(data), // Convert the JavaScript object to a JSON string
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+async function postInfo(e) {
+    e.preventDefault();
+    if (username.value === '' || password.value === '') {
+        alert('Username or password incorrect.');
+        return;
+    }
+
+    try {
+        const res = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: username.value,
+                password: password.value,
+                email:    email.value
+            })
+        });
+
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
         }
-        return response.json(); // Convert the response to JSON
-    })
-    .then(data => {
-        console.log(data); // Log the response data
-    })
-    .catch((error) => {
-        console.error('Error during signup:', error);
-    });
+
+        const data = await res.json();
+        console.log(data);
+        window.location.href = "onboarding.html";
+        // Do something with the response data
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+    }
 }
+
