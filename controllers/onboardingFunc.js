@@ -1,4 +1,3 @@
-//const totalGenres = require('../views/getSpotify');
 const User = require('./../models/User');
 const loginUser = require('./loginUser');
 const bcrypt = require('bcrypt');
