@@ -27,7 +27,6 @@ nav {
     font-weight: 400;
     letter-spacing: 0em;
     text-align: center;
-
 }
 
 .buttons {
@@ -75,6 +74,11 @@ button {
     margin-top: 10%;
 }
 
+.imageDiv {
+    height: 0;
+    right: 5%;
+}
+
 .textbox {
     border: 1px solid #7895CB;
     background: #3067B6;
@@ -95,13 +99,7 @@ button {
     text-shadow: 2px 3px 5px rgba(0,0,0,0.5);
 }
 
-.imageDiv {
-    position: relative;
-    right: 5vw;
-    display: flex;
-    flex-wrap: wrap;
 
-}
 
 #topImage, #leftImage, #rightImage {
     height: 250px;
