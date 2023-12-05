@@ -99,33 +99,6 @@ button {
     text-shadow: 2px 3px 5px rgba(0,0,0,0.5);
 }
 
-
-
-#topImage, #leftImage, #rightImage {
-    height: 250px;
-    width: 250px;
-}
-
-#topImage {
-    position: absolute;
-    right: 9.5vw;
-    z-index: 2;
-}
-
-#leftImage {
-    position: absolute;
-    top: 8vw;
-    right: 15vw;
-    z-index: 1;
-}
-
-#rightImage {
-    position: absolute;
-    top: 8vw;
-    right: 2vw;
-    z-index: 3;
-}
-
 .bottomSignup {
     margin-top: 10vw;
     display: flex;
