@@ -2,3 +2,16 @@
     margin-top: 15%;
     margin-left: 40%;
 }
+
+#overlay {
+    margin-left: 35%;
+    margin-top: 30%;
+}
+
+#mostFrequentGenreDisplay {
+    border: 1px solid black;
+    display: inline;
+    padding: 5px;
+    border-radius: 10px;
+    margin-left: 60%;
+}
