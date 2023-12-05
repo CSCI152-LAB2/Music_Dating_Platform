@@ -17,7 +17,7 @@ const getUsers = async (req, res) => {
         //const randomIndex = Math.floor(Math.random() * totalUsers);
         //const randomUser = await usersCollection.findOne({}, { skip: randomIndex }); //returns random user
 
-        return totalUsers;
+        return totalUsers;  //array of users
     }
 
     const usersWithSameGenre = await getTotalUsers();
