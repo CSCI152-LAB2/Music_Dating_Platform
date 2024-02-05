@@ -9,7 +9,7 @@ const getProfile = async (req, res) => {
         const currUser = User.findOne({ username })
             .exec((err, userObj) => {
                 if (err) {
-                    res.status(500).json({ "message": "Unable to " })
+                    res.status(500).json({ "message": "Unable to get user" })
                 } else {
                     res.json(userObj);
                 }
