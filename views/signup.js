@@ -22,7 +22,7 @@ async function postInfo(e) {
             body: JSON.stringify({
                 username: username.value,
                 password: password.value,
-                email:    email.value
+                email: email.value
             })
         });
 
