@@ -7,6 +7,6 @@ router.get('^/$|/onboarding(.html)?', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'onboarding.html'));
 })
 
-router.post('^/$|/onboarding(.html)?', finishSignup);
+router.put('^/$|/onboarding(.html)?', finishSignup);    //change to post if running into erros when creating an account - not sure why this happens lol
 
 module.exports = router;
