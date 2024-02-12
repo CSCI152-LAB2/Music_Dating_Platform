@@ -24,7 +24,7 @@ const registerUser = async (req, res) => {
             req.session.user = { username, email };
 
             console.log(new_user);
-            res.status(201).json({ "message": `New user created!`, "token": `${token}`, "User": new_user }); //${new_user} should only be used for testing
+            res.status(201).json({ "message": `New user created!`, "User": new_user }); //${new_user} should only be used for testing
         } catch (err) {                                                                                //will be replaced when project is deployed
             res.status(500).json({ "message": err.message });                                          //as it is a security risk
         }
