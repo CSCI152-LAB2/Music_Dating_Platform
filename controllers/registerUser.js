@@ -18,9 +18,10 @@ const registerUser = async (req, res) => {
                 "email": email
             });
 
-            const token = jwt.sign({ user: User.username }, process.env.SECRET_STR, {
+            /*const token = jwt.sign({ user: User.username }, process.env.SECRET_STR, {
                 expiresIn: process.env.LOGIN_EXPIRES
-            });
+            });*/
+            req.session.user = { username, email };
 
             console.log(new_user);
             res.status(201).json({ "message": `New user created!`, "token": `${token}`, "User": new_user }); //${new_user} should only be used for testing

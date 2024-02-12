@@ -3,7 +3,10 @@ const loginUser = require('./loginUser');
 const bcrypt = require('bcrypt');
 
 const finishSignup = async (req, res) => {
-
+    console.log('session ID:', req.session.user)
+    if (!req.session.user) {
+        return res.redirect('/signup');
+    }
     //const { username, password, firstname, lastname, dob, location, sex, sexualPreference } = req.body;
     const { topGenre, username, password, firstname, lastname, dob, location, sex, sexualPreference } = req.body.data;
     const loginResult = await loginUser(req, res);

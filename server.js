@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const User = require('./models/User');
 const PORT = process.env.PORT || 5501;
 const cors = require('cors');
+const session = require('express-session')
 const http = require('http');
 const { Server } = require('socket.io');
 
@@ -18,6 +19,15 @@ app.use(cors());
 
 app.use(express.json()) //parses the data in POST and PUT requests which allows us to extract information from the request body
 app.use(express.urlencoded({ extended: true }))
+app.use(session({
+    secret: process.env.SECRET_STR,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 60 * 60 * 1000
+    }
+}))
+
 app.use(express.static('views'));
 
 io.on('connection', (socket) => {
