@@ -19,14 +19,6 @@ app.use(cors());
 
 app.use(express.json()) //parses the data in POST and PUT requests which allows us to extract information from the request body
 app.use(express.urlencoded({ extended: true }))
-app.use(session({
-    secret: process.env.SECRET_STR,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        maxAge: 60 * 60 * 1000
-    }
-}))
 
 app.use(express.static('views'));
 

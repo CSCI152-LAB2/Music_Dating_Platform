@@ -18,13 +18,12 @@ const registerUser = async (req, res) => {
                 "email": email
             });
 
-            /*const token = jwt.sign({ user: User.username }, process.env.SECRET_STR, {
-                expiresIn: process.env.LOGIN_EXPIRES
-            });*/
-            req.session.user = { username, email };
+            const token = jwt.sign({ username, email }, process.env.SECRET_STR, {
+                expiresIn: '1h'
+            });
 
             console.log(new_user);
-            res.status(201).json({ "message": `New user created!`, "User": new_user }); //${new_user} should only be used for testing
+            res.status(201).json({ "message": `New user created!`, "User": new_user, "token": token }); //${new_user} should only be used for testing
         } catch (err) {                                                                                //will be replaced when project is deployed
             res.status(500).json({ "message": err.message });                                          //as it is a security risk
         }
