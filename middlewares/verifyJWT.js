@@ -12,8 +12,9 @@ const verifyCookie = (req, res, next) => {
             return res.redirect('/login')
         }
     } catch (err) {
-        console.log(err.message);
+        console.log(err.message, " - redirected to login page");
+        return res.redirect('/login');
     }
 }
 
-module.exports = verifyCookie
+module.exports = { verifyCookie }

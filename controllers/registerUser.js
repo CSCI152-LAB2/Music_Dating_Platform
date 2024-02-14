@@ -22,7 +22,12 @@ const registerUser = async (req, res) => {
                 expiresIn: '1h'
             });
 
+            res.cookie("token", token, {
+                httpOnly: true
+            })
+
             console.log(new_user);
+            console.log('\nToken:', token)
             res.status(201).json({ "message": `New user created!`, "User": new_user, "token": token }); //${new_user} should only be used for testing
         } catch (err) {                                                                                //will be replaced when project is deployed
             res.status(500).json({ "message": err.message });                                          //as it is a security risk

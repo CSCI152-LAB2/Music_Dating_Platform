@@ -11,6 +11,7 @@ const cors = require('cors');
 const session = require('express-session')
 const http = require('http');
 const { Server } = require('socket.io');
+const { verifyCookie } = require('./middlewares/verifyJWT');
 
 const server = http.createServer(app);
 const io = new Server(server);
@@ -34,9 +35,13 @@ io.on('connection', (socket) => {
         console.log('user disconnected');
     })
 })
-app.use('/', require('./routes/index'));
+
 app.use('/signup', require('./routes/signup'));
 app.use('/login', require('./routes/login'));
+
+app.use(verifyCookie);
+
+app.use('/', require('./routes/index'));
 app.use('/onboarding', require('./routes/onboarding'));
 app.use('/main', require('./routes/mainpage'));
 app.use('/message', require('./routes/messages'));
