@@ -50,48 +50,48 @@ const onboardingDOM = () => {
     console.log('onborading submit button clicked')
     //document.addEventListener('DOMContentLoaded', function () {
     const onboardingFormAnswer = document.querySelector('input[name="Music Genre"]:checked');
-    const username = document.getElementById('username');
+    const username = document.cookie;
     const password = document.getElementById('password');
     const spotifyGenre = document.getElementById('mostFrequentGenreDisplay');
-    const submit_button = document.getElementById('submit');
-    const selectedRadio = document.querySelector('input[name="Music Genre"]:checked');
 
     // Log each element to check if it's found - testing only
-    console.log('onboardingForm:', onboardingFormAnswer.value);
+    if (onboardingFormAnswer) {
+        console.log('onboardingForm:', onboardingFormAnswer.value);
+    }
     console.log('username:', username);
     console.log('password:', password);
     console.log('spotifyGenre:', spotifyGenre.textContent.substring(39));
-    console.log('submit_button:', submit_button);
-    console.log('selectedRadio:', selectedRadio);
 
-    if (!onboardingFormAnswer || !username || !password || !spotifyGenre || !submit_button || !selectedRadio) {
+    if (!onboardingFormAnswer || !username || !password || !spotifyGenre) {
         console.log('items missing')
-        return;
+        //return;
     }
 
     // Log for debugging purposes
     console.log('All elements found. Adding event listener.');
 
-    submit_button.addEventListener('click', postInfo);
+    //submit_button.addEventListener('click', postInfo);
     const baseURL = 'http://localhost:5501/onboarding';
 
-    async function postInfo(e) {
-        e.preventDefault();
+    //async function postInfo(e) {
+    async function postInfo() {
+        console.log("postInfo function run")            // used for testing purposes
+        //e.preventDefault();
         try {
             let topGenre = "";
-            if (!spotifyGenre.textContent === "") {
+            if (spotifyGenre.textContent === "") {
                 topGenre = onboardingFormAnswer;
             } else {
                 topGenre = spotifyGenre.textContent.substring(39);
             }
             const res = await fetch(baseURL, {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    username: username.value,
-                    password: password.value,
+                    username: username,
+                    //password: password.value,
                     topGenre: topGenre
                 })
             });
@@ -108,5 +108,7 @@ const onboardingDOM = () => {
             console.error('There was a problem with the fetch operation:', error);
         }
     }
+
+    postInfo();
 }
 

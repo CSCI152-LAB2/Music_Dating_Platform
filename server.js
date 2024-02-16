@@ -12,11 +12,13 @@ const session = require('express-session')
 const http = require('http');
 const { Server } = require('socket.io');
 const { verifyCookie } = require('./middlewares/verifyJWT');
+const cookieParser = require('cookie-parser')
 
 const server = http.createServer(app);
 const io = new Server(server);
 connectDB();
 app.use(cors());
+app.use(cookieParser())
 
 app.use(express.json()) //parses the data in POST and PUT requests which allows us to extract information from the request body
 app.use(express.urlencoded({ extended: true }))
@@ -37,12 +39,13 @@ io.on('connection', (socket) => {
 })
 
 app.use('/signup', require('./routes/signup'));
+app.use('/onboarding', require('./routes/onboarding'));
 app.use('/login', require('./routes/login'));
 
 app.use(verifyCookie);
 
 app.use('/', require('./routes/index'));
-app.use('/onboarding', require('./routes/onboarding'));
+//app.use('/onboarding', require('./routes/onboarding'));
 app.use('/main', require('./routes/mainpage'));
 app.use('/message', require('./routes/messages'));
 app.use('/profile', require('./routes/profilepage'));
