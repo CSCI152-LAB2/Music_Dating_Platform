@@ -80,17 +80,18 @@ const onboardingDOM = () => {
         try {
             let topGenre = "";
             if (spotifyGenre.textContent === "") {
-                topGenre = onboardingFormAnswer;
+                topGenre = onboardingFormAnswer.value;
             } else {
                 topGenre = spotifyGenre.textContent.substring(39);
             }
+            console.log('topGenre is equal to: ', topGenre)          // used for testing purposes
             const res = await fetch(baseURL, {
                 method: 'PUT',
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    username: username,
+                    //username: username,
                     //password: password.value,
                     topGenre: topGenre
                 })
