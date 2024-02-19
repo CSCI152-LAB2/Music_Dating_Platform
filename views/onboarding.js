@@ -46,7 +46,7 @@
 */
 
 // onboarding.js
-const onboardingDOM = () => {
+const onboardingSubmit = () => {
     console.log('onborading submit button clicked')
     //document.addEventListener('DOMContentLoaded', function () {
     const onboardingFormAnswer = document.querySelector('input[name="Music Genre"]:checked');
@@ -98,6 +98,7 @@ const onboardingDOM = () => {
             });
 
             if (!res.ok) {
+                console.log(`An error occurred in postInfo() at onboarding.js: ${res.status}`);
                 throw new Error(`HTTP error! status: ${res.status}`);
             }
 

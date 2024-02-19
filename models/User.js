@@ -34,7 +34,7 @@ const userSchema = new Schema({
         type: String
     },
     topGenre: {
-        type: [String]
+        type: String
     },
     likedUsers: {
         type: [String]
