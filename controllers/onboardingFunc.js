@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken')
 const finishSignup = async (req, res) => {
     console.log("finishSignup has run from onboardingFunc.js")                 // for testing purposes only
     const token = req.cookies.token;
+    const { topGenre } = req.body;
+    console.log('topGenre from request is ', topGenre);
     console.log('session ID:', token)                   // for testing purposes
     const verified_token = jwt.verify(req.cookies.token, process.env.SECRET_STR)
     if (!verified_token) {
