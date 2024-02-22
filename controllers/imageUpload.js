@@ -6,14 +6,14 @@ const storage = multer.diskStorage({
         cb(null, 'uploads');
     },
     filename: function(req, file, cb) {
-        cb(null, new Date().toISOString() + '-' + file.originalname);
+        cb(null, new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname);
     }
 });
 
 const upload = multer({ storage: storage }).single('photo');
 
-app.post('/upload/:userId', (req, res) => {
-    upload(req, res, async(err) => {
+exports.uploadPhoto = (req, res) => {
+    upload(req, res, async (err) => {
         if (err) {
             return res.status(500).send({ error: err.message });
         }
@@ -27,14 +27,13 @@ app.post('/upload/:userId', (req, res) => {
                 return res.status(404).send('User not found');
             }
 
-            user.profilePic = req.file.path;
+            user.profilePic = req.file.path; // You might want to adjust the path as needed
 
             await user.save();
-            req.send({ message: 'Profile picture updated successfully', profilePic: user.profilePic });
-        }
-        catch {
-            res.status(500).send({ error: error.messgae });
+            res.send({ message: 'Profile picture updated successfully', profilePic: user.profilePic });
+        } 
+        catch (error) {
+            res.status(500).send({ error: error.message });
         }
     });
-});
-
+};
