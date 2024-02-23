@@ -7,7 +7,7 @@ router.get('^/$|/main(.html)?', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'main_page.html'));
 })
 
-router.get('^/$|/main(.html)?/users', getUsers);
+router.get('^/$|/main(.html)', getUsers);
 
 router.put('^/$|/main(.html)?', postLikeDislike);
 
