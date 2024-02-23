@@ -1,0 +1,35 @@
+@font-face {
+    font-family: 'Poppins';
+    src: url('path/to/your/font/Poppins-Regular.ttf') format('truetype');
+    /* You can include different font weights and formats here. */
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(180deg, #FF96A2 0%, rgba(255, 192, 200, 0.54) 99.99%, rgba(241, 180, 187, 0) 100%);
+}
+
+#profile_data {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#profile_pic {
+    max-width: 42%;
+    max-height: 42%;
+}
+
+#profile_details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#profile_details p {
+    width: calc(100% / 3);
+    text-align: center;
+}

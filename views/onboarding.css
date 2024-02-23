@@ -1,4 +1,22 @@
 #spotifyLinkButton {
-    margin-top: 15%;
+    margin-top: 20%;
     margin-left: 40%;
+}
+
+#overlay {
+    margin-left: 35%;
+    margin-top: 30%;
+}
+
+#mostFrequentGenreDisplay {
+    border: 1px solid black;
+    display: inline;
+    padding: 5px;
+    border-radius: 10px;
+    margin-left: 60%;
+}
+
+#genderDiv {
+    margin-bottom: 20%;
+    margin-left: 80%;
 }

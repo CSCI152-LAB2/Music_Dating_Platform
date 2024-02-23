@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="login.css">
     <link rel="stylesheet" href="onboarding.css">
     <script src="getSpotify.js" defer></script>
-    <script src="onboarding.js" defer></script>
     <script src="backhome.js" defer></script>
+    <script src="onboarding.js" defer></script>
 </head>
 
 <body>
@@ -19,7 +19,7 @@
                 onclick="backtoHome()">
         </div>
     </nav>
-    <div id="Overlay">
+    <div id="overlay">
         <form id="onboardingForm">
             <h2>What music genre are you into?</h2>
             <label for="Alternative">Alternative</label>
@@ -62,10 +62,32 @@
             <input type="radio" name="Music Genre" id="Reggae" value="Reggae">
             <br>
             <br>
-            <input type="submit" value="Submit">
+            <!--<input type="submit" value="Submit" onclick="onboardingDOM()"> -->
+            <a href="http://localhost:5501/">
+                <button type="button" onclick="onboardingSubmit()">Submit</button>
+            </a>
         </form>
-        </div>
-        <button type="button" id="spotifyLinkButton" onclick="getTopArtists()">Link Spotify API</button>
+    </div>
+    <div id="genderDiv">
+        <label>Gender</label>
+        <select id="usersSex">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label>Show me</label>
+        <select id="usersSexualPreference">
+            <option value="Male">Men</option>
+            <option value="Female">Women</option>
+            <option value="Other">Other</option>
+            <option value="All">All</option>
+        </select>
+    </div>
+    <div id="rightSide">
+        <p id="mostFrequentGenreDisplay"></p>
+    </div>
+    <button type="button" id="spotifyLinkButton" onclick="getTopArtists()">Link Spotify API</button>
 </body>
 
 </html>

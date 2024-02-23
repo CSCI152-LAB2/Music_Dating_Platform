@@ -67,6 +67,7 @@ const usersTopGenre = () => {
     const genreFrequency = calculateGenreFrequency(totalGenres);
 
     const mostFrequentGenre = findMostFrequentGenres(genreFrequency, 1);
-    console.log('Most Frequent Genre:', mostFrequentGenre[0]);  //mostFrequentGenre is the most frequent genres
-    //array, and accesses the most frequent genre in the array which is at index 0
+    const displayTopGenre = document.getElementById('mostFrequentGenreDisplay');
+    displayTopGenre.innerHTML = `According to Spotify, your top genre is ${mostFrequentGenre[0]}`;
+    console.log(mostFrequentGenre[0])                       //used for testing purposes
 }

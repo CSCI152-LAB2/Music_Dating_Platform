@@ -1,7 +1,7 @@
 const User = require('../models/User');
 require('dotenv').config();
 
-const getUsers = async (req, res) => {
+/*const getUsers = async (req, res) => {
     const { username, topGenre } = req.body;
     const uri = process.env.DATABASE_URI;
     const databaseName = 'CadenceDB';
@@ -17,12 +17,29 @@ const getUsers = async (req, res) => {
         //const randomIndex = Math.floor(Math.random() * totalUsers);
         //const randomUser = await usersCollection.findOne({}, { skip: randomIndex }); //returns random user
 
-        return totalUsers;
+        return totalUsers;  //array of users
     }
 
     const usersWithSameGenre = await getTotalUsers();
     const randomIndex = Math.floor(Math.random() * usersWithSameGenre.length);
     res.json({ "retrieved-user": usersWithSameGenre[randomIndex] });
+}*/
+
+const getUsers = async (req, res) => {
+    const verified_jwt = jwt.verify(req.cookies.token, process.env.SECRET_STR)
+    if (!verified_jwt) {
+        return res.redirect('/login');
+    }
+    const { username } = verified_jwt;
+    var usersTopGenre = await User.findOne(
+        { username }
+    )
+    usersTopGenre = usersTopGenre.topGenre;
+    const getTotalUsers = await db.users.find(
+        { "topGenre": usersTopGenre }, { "username": 1, "firstname": 1, "dob": 1, "location": 1, "sex": 1, "sexualPreference": 1, "topGenre": 1 }       //returns a pointer to the first element that matches the first parameter
+    );                                                                                                                                                  //in the "find" query. The second parameter are options of what should be                                                                                                                                                  
+    const similarUsers = getTotalUsers.toArray();                                                                                                       //returned in the response
+    console.log(similarUsers);
 }
 
 const postLikeDislike = async (req, res) => {
