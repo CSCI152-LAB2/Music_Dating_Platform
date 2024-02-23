@@ -1,3 +1,4 @@
+// thi page is redundant. Will probably remove later
 const express = require('express');
 const router = express.Router();
 const path = require('path');

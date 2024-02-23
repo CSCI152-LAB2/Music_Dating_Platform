@@ -44,9 +44,9 @@ app.use('/login', require('./routes/login'));
 
 app.use(verifyCookie);
 
-app.use('/', require('./routes/index'));
+app.use('/index', require('./routes/mainpage'));
 //app.use('/onboarding', require('./routes/onboarding'));
-app.use('/main', require('./routes/mainpage'));
+//app.use('/main', require('./routes/mainpage'));
 app.use('/message', require('./routes/messages'));
 app.use('/profile', require('./routes/profilepage'));
 
