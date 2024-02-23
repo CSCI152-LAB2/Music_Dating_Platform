@@ -5,6 +5,8 @@ const onboardingSubmit = () => {
     const onboardingFormAnswer = document.querySelector('input[name="Music Genre"]:checked');
     const username = document.cookie.token;
     const spotifyGenre = document.getElementById('mostFrequentGenreDisplay');
+    const getUsersSex = document.getElementById('usersSex').value;
+    const getUsersSexualPreference = document.getElementById('usersSexualPreference').value;
 
     // Log each element to check if it's found - testing only
     if (onboardingFormAnswer) {
@@ -19,6 +21,8 @@ const onboardingSubmit = () => {
     }
 
     // Log for debugging purposes
+    console.log(getUsersSex);
+    console.log(getUsersSexualPreference);
     console.log('All elements found. Adding event listener.');
 
     //submit_button.addEventListener('click', postInfo);
@@ -44,7 +48,9 @@ const onboardingSubmit = () => {
                 body: JSON.stringify({
                     //username: username,
                     //password: password.value,
-                    topGenre: topGenre
+                    topGenre: topGenre,
+                    sex: getUsersSex,
+                    sexualPreference: getUsersSexualPreference
                 })
             });
 

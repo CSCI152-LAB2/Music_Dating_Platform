@@ -19,7 +19,7 @@
                 onclick="backtoHome()">
         </div>
     </nav>
-    <div id="Overlay">
+    <div id="overlay">
         <form id="onboardingForm">
             <h2>What music genre are you into?</h2>
             <label for="Alternative">Alternative</label>
@@ -67,6 +67,22 @@
                 <button type="button" onclick="onboardingSubmit()">Submit</button>
             </a>
         </form>
+    </div>
+    <div id="genderDiv">
+        <label>Gender</label>
+        <select id="usersSex">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label>Show me</label>
+        <select id="usersSexualPreference">
+            <option value="Male">Men</option>
+            <option value="Female">Women</option>
+            <option value="Other">Other</option>
+            <option value="All">All</option>
+        </select>
     </div>
     <div id="rightSide">
         <p id="mostFrequentGenreDisplay"></p>
