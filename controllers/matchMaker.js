@@ -26,20 +26,26 @@ require('dotenv').config();
 }*/
 
 const getUsers = async (req, res) => {
-    const verified_jwt = jwt.verify(req.cookies.token, process.env.SECRET_STR)
-    if (!verified_jwt) {
-        return res.redirect('/login');
+    try {
+        console.log('getUsers running');
+        const verified_jwt = jwt.verify(req.cookies.token, process.env.SECRET_STR);
+        if (!verified_jwt) {
+            return res.redirect('/login');
+        }
+        const { username } = verified_jwt;
+        var usersTopGenre = await User.findOne(
+            { username }
+        );
+        usersTopGenre = usersTopGenre.topGenre;
+        const getTotalUsers = await db.users.find(
+            { "topGenre": usersTopGenre }, { "username": 1, "firstname": 1, "dob": 1, "location": 1, "sex": 1, "sexualPreference": 1, "topGenre": 1 }       //returns a pointer to the first element that matches the first parameter
+        );                                                                                                                                                  //in the "find" query. The second parameter are options of what should be                                                                                                                                                  
+        const similarUsers = getTotalUsers.toArray();                                                                                                       //returned in the response
+        console.log(similarUsers);
+        res.send(similarUsers);
+    } catch (err) {
+        console.log(err.message)
     }
-    const { username } = verified_jwt;
-    var usersTopGenre = await User.findOne(
-        { username }
-    )
-    usersTopGenre = usersTopGenre.topGenre;
-    const getTotalUsers = await db.users.find(
-        { "topGenre": usersTopGenre }, { "username": 1, "firstname": 1, "dob": 1, "location": 1, "sex": 1, "sexualPreference": 1, "topGenre": 1 }       //returns a pointer to the first element that matches the first parameter
-    );                                                                                                                                                  //in the "find" query. The second parameter are options of what should be                                                                                                                                                  
-    const similarUsers = getTotalUsers.toArray();                                                                                                       //returned in the response
-    console.log(similarUsers);
 }
 
 const postLikeDislike = async (req, res) => {
