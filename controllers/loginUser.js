@@ -24,6 +24,7 @@ const loginUser = async (req, res) => {
                 res.cookie("token", token, {
                     httpOnly: true
                 })
+                console.log(({ "Success": "User logged in", "token": token, "User": user }))
                 return res.json({ "Success": "User logged in", "token": token, "User": user });
             } else {
                 return res.status(401).json({ "message": "Password is incorrect" });
