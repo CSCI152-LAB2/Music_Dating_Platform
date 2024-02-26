@@ -42,7 +42,7 @@ app.use('/signup', require('./routes/signup'));
 app.use('/onboarding', require('./routes/onboarding'));
 app.use('/login', require('./routes/login'));
 
-app.use(verifyCookie);
+//app.use(verifyCookie);
 
 app.use('/index', require('./routes/mainpage'));
 //app.use('/onboarding', require('./routes/onboarding'));
