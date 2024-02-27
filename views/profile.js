@@ -9,12 +9,25 @@ const getProfileData = async (req, res) => {
         })
 
         if (userData.ok) {
-            let data = await userData.json();
-            console.log(data);
+            console.log(userData);
+            const userObject = await userData.json();
+            console.log('User data received successfully\n', userObject);
+            handleDisplayProfile(userObject);
+
         } else {
             console.log("user data unable to be fetched");
         }
     } catch (err) {
         console.log(err);
     }
+}
+
+const handleDisplayProfile = (user) => {                    //gonna come up with a better way to do some of this stuff than hard-coding every DOM manipulation
+    document.getElementById('profile-name').innerText = user.username;
+    /*document.getElementById('profile-age').innerText = null;
+    document.getElementById('profile-sex').innerText = null;
+    document.getElementById('profile-genre').innerText = null;
+    document.getElementById('profile-location').innerText = null;
+    document.getElementById('profile-sexualpreference').innerText = null;
+    */
 }
