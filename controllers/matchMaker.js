@@ -29,6 +29,7 @@ require('dotenv').config();
 const getUsers = async (req, res) => {
     console.log('getUsers running in backend');
     try {
+        //let similarUsers = [];
         console.log('getUsers running');
         const verified_jwt = jwt.verify(req.cookies.token, process.env.SECRET_STR);
         console.log('jwt was verified successfully');
@@ -36,13 +37,13 @@ const getUsers = async (req, res) => {
             return res.redirect('/login');
         }
         const { username } = verified_jwt;
-        var usersTopGenre = await User.findOne(
+        let currentUser = await User.findOne(
             { username }
         );
-        usersTopGenre = usersTopGenre.topGenre;
+        let usersTopGenre = currentUser.topGenre;
         const getTotalUsers = await User.find(
             { "topGenre": usersTopGenre }
-        );
+        )
         console.log(getTotalUsers);
         res.send(getTotalUsers);
     } catch (err) {
