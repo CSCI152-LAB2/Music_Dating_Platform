@@ -7,6 +7,8 @@ const onboardingSubmit = () => {
     const spotifyGenre = document.getElementById('mostFrequentGenreDisplay');
     const getUsersSex = document.getElementById('usersSex').value;
     const getUsersSexualPreference = document.getElementById('usersSexualPreference').value;
+    const getUsersAge = document.getElementById('onboardingAge').innerText;
+    const userLocation = document.getElementById('onboardingLocation').innerText;
 
     // Log each element to check if it's found - testing only
     if (onboardingFormAnswer) {
@@ -50,7 +52,9 @@ const onboardingSubmit = () => {
                     //password: password.value,
                     topGenre: topGenre,
                     sex: getUsersSex,
-                    sexualPreference: getUsersSexualPreference
+                    sexualPreference: getUsersSexualPreference,
+                    age: getUsersAge,
+                    location: userLocation
                 })
             });
 
