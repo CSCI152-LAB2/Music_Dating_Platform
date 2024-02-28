@@ -24,10 +24,9 @@ const getProfileData = async (req, res) => {
 
 const handleDisplayProfile = (user) => {                    //gonna come up with a better way to do some of this stuff than hard-coding every DOM manipulation
     document.getElementById('profile-name').innerText = user.username;
-    /*document.getElementById('profile-age').innerText = null;
-    document.getElementById('profile-sex').innerText = null;
-    document.getElementById('profile-genre').innerText = null;
-    document.getElementById('profile-location').innerText = null;
-    document.getElementById('profile-sexualpreference').innerText = null;
-    */
+    document.getElementById('profile-age').innerText = user.age;
+    document.getElementById('profile-sex').innerText = user.sex;
+    document.getElementById('profile-genre').innerText = user.topGenre;
+    document.getElementById('profile-location').innerText = user.location;
+    document.getElementById('profile-sexualpreference').innerText = user.sexualPreference;
 }
