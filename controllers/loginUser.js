@@ -16,11 +16,15 @@ const loginUser = async (req, res) => {
 
         if (user) {
             const verify = await bcrypt.compare(password, user.password);
-
             if (verify) {
-                const token = jwt.sign({ user: user.username }, process.env.SECRET_STR, {
-                    expiresIn: process.env.LOGIN_EXPIRES
+                const token = jwt.sign({ username }, process.env.SECRET_STR, {
+                    expiresIn: '1h'
                 });
+
+                res.cookie("token", token, {
+                    httpOnly: true
+                })
+                console.log(({ "Success": "User logged in", "token": token, "User": user }))
                 return res.json({ "Success": "User logged in", "token": token, "User": user });
             } else {
                 return res.status(401).json({ "message": "Password is incorrect" });

@@ -3,12 +3,13 @@ const router = express.Router();
 const path = require('path');
 const { getUsers, postLikeDislike } = require('../controllers/matchMaker');
 
-router.get('^/$|/main(.html)?', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'views', 'main_page.html'));
-})
+/*router.get('^/$|/index(.html)?', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'views', 'index.html'));
+})*/
 
-router.get('^/$|/main(.html)', getUsers);
+router.get('^/$|/index(.html)?', getUsers);
+//router.get('/index/search', getUsers);
 
-router.put('^/$|/main(.html)?', postLikeDislike);
+router.put('^/$|/index(.html)?', postLikeDislike);
 
 module.exports = router;
