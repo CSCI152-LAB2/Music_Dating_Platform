@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 const finishSignup = async (req, res) => {
     console.log("finishSignup has run from onboardingFunc.js")                 // for testing purposes only
     const token = req.cookies.token;
-    const { topGenre, sex, sexualPreference } = req.body;
+    const { topGenre, sex, sexualPreference, age, location } = req.body;
     console.log('topGenre from request is ', topGenre);
     console.log('session ID:', token)                   // for testing purposes
     const verified_token = jwt.verify(req.cookies.token, process.env.SECRET_STR)
@@ -23,7 +23,7 @@ const finishSignup = async (req, res) => {
         const findUser = await User.findOneAndUpdate(
             { username: username },
             //{ $set: { firstname, lastname, dob, location, sex, sexualPreference, topGenre } },
-            { $set: { topGenre, sex, sexualPreference } },
+            { $set: { topGenre, sex, sexualPreference, age, location } },
             { new: true }
         );
 

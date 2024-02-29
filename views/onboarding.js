@@ -7,14 +7,15 @@ const onboardingSubmit = () => {
     const spotifyGenre = document.getElementById('mostFrequentGenreDisplay');
     const getUsersSex = document.getElementById('usersSex').value;
     const getUsersSexualPreference = document.getElementById('usersSexualPreference').value;
-    const getUsersAge = document.getElementById('onboardingAge').innerText;
-    const userLocation = document.getElementById('onboardingLocation').innerText;
+    const getUsersAge = document.getElementById('onboardingAge').value;
+    const userLocation = document.getElementById('onboardingLocation').value;
 
     // Log each element to check if it's found - testing only
     if (onboardingFormAnswer) {
         console.log('onboardingForm:', onboardingFormAnswer.value);
     }
-    console.log('username:', username);
+    console.log('userLocation = ', userLocation);
+    console.log('age = ', getUsersAge);
     console.log('spotifyGenre:', spotifyGenre.textContent.substring(39));
 
     if (!onboardingFormAnswer && !username || !spotifyGenre && !username) {
