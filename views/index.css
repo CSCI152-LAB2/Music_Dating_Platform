@@ -53,9 +53,14 @@ body {
     width: 50%;
 }
 
-.user-details {
+#user-details {
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-wrap: wrap;
     justify-content: center;
+    width: 60%;
+}
+
+#user-details p {
+    width: calc(100%/3);
+    text-align: center;
 }

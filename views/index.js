@@ -38,22 +38,22 @@ const handleDisplayUsers = (username, sex, topGenre, age, location, sexualPrefer
 
 // need to run tests on this function once some of the styling for the main page is complete, buttons to like/dislike a user disappear after clicking 'search users' lol
 const likeOrDislike = async (like_or_dislike) => {
-    const token = jwt.verify(document.cookie.token, process.env.SECRET_STR);
-    const { username } = token;
-    const otherUserUsername = document.getElementById('showUsername').innertText;
+    const otherUserUsername = document.getElementById('showUsername').innerText;
     switch (like_or_dislike) {
-        case "like":
-            console.log(username, ' liked this user');
+        case 'like':
+            console.log('User liked: ', otherUserUsername);
             const sendLikedUser = await fetch('http://localhost:5501/index', {
                 method: 'PUT',
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ otherUserName, "likedUser": true })
+                body: JSON.stringify({ otherUserUsername, "likedUser": true })
             })
+            console.log('REQUEST FROM likeOrDislike FUNCTION - frontend:');
+            console.log(sendLikedUser);
             break;
-        case "dislike":
-            console.log(username, ' disliked this user');
+        case 'dislike':
+            console.log('User disliked: ', otherUserUsername);
             const sendDislikedUser = await fetch('http://localhost:5501/index', {
                 method: 'PUT',
                 headers: {
