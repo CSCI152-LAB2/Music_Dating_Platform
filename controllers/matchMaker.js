@@ -52,21 +52,27 @@ const getUsers = async (req, res) => {
 }
 
 const postLikeDislike = async (req, res) => {
-    const { username, liked, disliked } = req.body; //username is the username of the user that is currently signed in, while
-    if (liked instanceof User) {                    // liked and dislike are the usernames of the users who the user has liked
+    console.log('postLikeDislike function run');
+    const { otherUserUsername, likedUser } = req.body;
+    console.log(`otherUserUsername is ${otherUserUsername} and likedUser is equal to ${likedUser}`); // for debugging
+    const token = req.cookies.token;
+    console.log(token);     // for debugging
+    const { username } = jwt.verify(token, process.env.SECRET_STR);
+    console.log(username);  // for debugging
+    if (likedUser == true) {
+        const currentUser = await User.findOneAndUpdate(
+            { username },
+            { $push: { likedUsers: otherUserUsername } }
+            //{ new: true }
+        )
+        console.log(`\n\n\nUpdated user: ${currentUser}`);
+        res.status(200).json({ "message": `${otherUserUsername} added to liked users for ${username}!` })
+    } else if (likedUser == false) {
         const currentUser = await User.findOneAndUpdate(
             { username: username },
-            { $push: { likedUsers: liked } },
-            { new: true }
+            { $push: { dislikedUsers: disliked } }
         )
-        res.status(200).json({ "message": `${liked} added to liked users for ${username}!` })
-    } else if (disliked instanceof User) {
-        const currentUser = await User.findOneAndUpdate(
-            { username: username },
-            { $push: { dislikedUsers: disliked } },
-            { new: true }
-        )
-        res.status(200).json({ "message": `${disliked} added to disliked users for ${username}!` })
+        res.status(200).json({ "message": `${otherUserUsername} added to disliked users for ${username}!` })
     } else {
         res.status(400).json({ "message": "Error editing user on backend" });
     }
