@@ -59,7 +59,7 @@ const likeOrDislike = async (like_or_dislike) => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ otherUserName, "likedUser": false })
+                body: JSON.stringify({ otherUserUsername, "likedUser": false })
             })
             break;
     }
