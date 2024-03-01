@@ -1,3 +1,5 @@
+userArray = []
+
 const getSimilarUsers = async (req, res) => {
     console.log('getSimilarUsers has run from frontend');
     const baseURL = "http://localhost:5501/index";
@@ -10,10 +12,11 @@ const getSimilarUsers = async (req, res) => {
         })
 
         if (getUsers.ok) {
+            console.log('retrieving users from backend...');
             let responseData = await getUsers.json();
             responseData.forEach(element => {
-                console.log(element.username, element.sex, element.topGenre);
-                handleDisplayUsers(element.username, element.sex, element.topGenre);
+                console.log(element.username, element.sex, element.topGenre, element.age, element.location, element.sexualPreference);
+                handleDisplayUsers(element.username, element.sex, element.topGenre, element.age, element.location, element.sexualPreference);
             });
         }
         console.log('getSimilarUsers function finished');
@@ -22,19 +25,43 @@ const getSimilarUsers = async (req, res) => {
     }
 }
 
-const handleDisplayUsers = (username, sex, topGenre) => {
-    // this function will be used to target HTML tags to display relevant data for users, will probably have to wait for some frontend stuff to be done before implementing
+const handleDisplayUsers = (username, sex, topGenre, age, location, sexualPreference) => {
+    const showUsername = document.getElementById('showUsername').innerText = username;
+    const showSex = document.getElementById('showSex').innerText = sex;
+    const showGenre = document.getElementById('showGenre').innerText = topGenre;
+    const showAge = document.getElementById('showAge').innerText = age;
+    const showLocation = document.getElementById('showLocation').innerText = location;
+    const showSexualPreference = document.getElementById('showSexualPreference').innerText = sexualPreference;
+    // will need one for displaying the respective user's profile pic
 }
 
-const likeOrDislike = async (req, res, like_or_dislike) => {
+
+// need to run tests on this function once some of the styling for the main page is complete, buttons to like/dislike a user disappear after clicking 'search users' lol
+const likeOrDislike = async (like_or_dislike) => {
     const token = jwt.verify(document.cookie.token, process.env.SECRET_STR);
     const { username } = token;
+    const otherUserUsername = document.getElementById('showUsername').innertText;
     switch (like_or_dislike) {
         case "like":
             console.log(username, ' liked this user');
+            const sendLikedUser = await fetch('http://localhost:5501/index', {
+                method: 'PUT',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ otherUserName, "likedUser": true })
+            })
             break;
         case "dislike":
             console.log(username, ' disliked this user');
+            const sendDislikedUser = await fetch('http://localhost:5501/index', {
+                method: 'PUT',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ otherUserName, "likedUser": false })
+            })
             break;
     }
+    // needs logic for adding user to liked / disliked arrays in user model in database
 }
