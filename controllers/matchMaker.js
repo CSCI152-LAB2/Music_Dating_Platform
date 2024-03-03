@@ -45,18 +45,18 @@ const getUsers = async (req, res) => {
             { "topGenre": usersTopGenre }
         )
         // FIX ME
-        let removedCurrUserArray = "";
+        console.log('current user = ', currentUser);
+        let removedCurrUserArray = [];
         console.log('\n\n------------getTotalUsers------------\n', getTotalUsers);
-        for (let foundUsers in getTotalUsers) { // probably would be more efficient to do this step wehn actually getting the users on line 44 but I'm not sure how to do that. Will do later if there is time
-            if (foundUsers.username === username) {
-                removedCurrUserArray = getTotalUsers.splice(getTotalUsers.indexOf(foundUsers), 1); // removes the signed in user from their queue of potential 
-                console.log('\n\n------------getTotalUsers after splicing------------\n', removedCurrUserArray);
-            }
-            if (foundUsers.username in currentUser.likedUsers || foundUsers.username in currentUser.dislikedUsers) {
-                removedCurrUserArray = removedCurrUserArray.splice(removedCurrUserArray.indexOf(foundUsers), 1);
+        for (let foundUser of getTotalUsers) {
+            if (!currentUser.likedUsers.includes(foundUser.username) &&
+                !currentUser.dislikedUsers.includes(foundUser.username) &&
+                foundUser.username !== username) {
+                removedCurrUserArray.push(foundUser);
             }
         }
-        console.log('\n\n------------getTotalUsers after checking if a user exists in liked users------------\n', getTotalUsers);
+
+        console.log('\n\n------------getTotalUsers after checking if a user exists in liked/disliked users and checking for current user in response------------\n', removedCurrUserArray);
         res.send(removedCurrUserArray);
         //
     } catch (err) {
