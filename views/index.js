@@ -26,6 +26,15 @@ const getSimilarUsers = async (req, res) => {
 }
 
 const handleDisplayUsers = (userObj) => {
+    if (userObj === null) {
+        const showUsername = document.getElementById('showUsername').innerText = 'Not available';
+        const showSex = document.getElementById('showSex').innerText = 'Not available';
+        const showGenre = document.getElementById('showGenre').innerText = 'Not available';
+        const showAge = document.getElementById('showAge').innerText = 'Not available';
+        const showLocation = document.getElementById('showLocation').innerText = 'Not available';
+        const showSexualPreference = document.getElementById('showSexualPreference').innerText = 'Not available';
+        return;
+    }
     const showUsername = document.getElementById('showUsername').innerText = userObj.username;
     const showSex = document.getElementById('showSex').innerText = userObj.sex;
     const showGenre = document.getElementById('showGenre').innerText = userObj.topGenre;
@@ -72,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const showUsers = document.getElementById('search-button');
         const like_button = document.getElementById('like-button');
         const dislike_button = document.getElementById('next-button');
+        const previous_button = document.getElementById('previous-button');
         let currIndex = 0;
 
         showUsers.addEventListener('click', async () => {
@@ -80,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (userArr.length > 0) {
                 handleDisplayUsers(userArr[currIndex]);
             } else {
+                handleDisplayUsers(null);
                 alert('Sorry, no users found');
             }
         })
@@ -90,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currIndex < userArr.length) {
                 handleDisplayUsers(userArr[currIndex]);
             } else {
+                handleDisplayUsers(null);
                 alert('Sorry, you have gone through all of the users. There are no more users to display')
             }
         })
@@ -100,8 +112,41 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currIndex < userArr.length) {
                 handleDisplayUsers(userArr[currIndex]);
             } else {
+                handleDisplayUsers(null);
                 alert('Sorry, you have gone through all of the users. There are no more users to display')
             }
+        })
+
+        previous_button.addEventListener('click', () => {
+            currIndex--;
+            if (currIndex < 0) {
+                currIndex = 0;
+                alert('There are no more previous users to see');
+                return;
+            } else {                            //
+                handleDisplayUsers(userArr[currIndex]);
+                like_button.addEventListener('click', async () => {
+                    await likeOrDislike("like");
+                    currIndex++;
+                    if (currIndex < userArr.length) {
+                        handleDisplayUsers(userArr[currIndex]);
+                    } else {
+                        handleDisplayUsers(null);
+                        alert('Sorry, you have gone through all of the users. There are no more users to display')
+                    }
+                })
+
+                dislike_button.addEventListener('click', async () => {
+                    await likeOrDislike("dislike");
+                    currIndex++;
+                    if (currIndex < userArr.length) {
+                        handleDisplayUsers(userArr[currIndex]);
+                    } else {
+                        handleDisplayUsers(null);
+                        alert('Sorry, you have gone through all of the users. There are no more users to display')
+                    }
+                })
+            }   //
         })
     }
 
