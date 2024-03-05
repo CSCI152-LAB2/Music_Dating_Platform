@@ -44,21 +44,20 @@ const getUsers = async (req, res) => {
         const getTotalUsers = await User.find(
             { "topGenre": usersTopGenre }
         )
-        // FIX ME
         console.log('current user = ', currentUser);
         let removedCurrUserArray = [];
         console.log('\n\n------------getTotalUsers------------\n', getTotalUsers);
         for (let foundUser of getTotalUsers) {
-            if (!currentUser.likedUsers.includes(foundUser.username) &&
+            /*if (!currentUser.likedUsers.includes(foundUser.username) &&       leave this code commented while testing because there arent very many users and thus, an error will occur because the array could be empty
                 !currentUser.dislikedUsers.includes(foundUser.username) &&
-                foundUser.username !== username) {
-                removedCurrUserArray.push(foundUser);
-            }
+                foundUser.username !== username) {*/
+            removedCurrUserArray.push(foundUser);
+            //}
         }
 
         console.log('\n\n------------getTotalUsers after checking if a user exists in liked/disliked users and checking for current user in response------------\n', removedCurrUserArray);
         res.send(removedCurrUserArray);
-        //
+
     } catch (err) {
         console.log(err.message)
     }
