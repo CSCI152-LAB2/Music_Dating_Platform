@@ -21,8 +21,8 @@ const userSchema = new Schema({
     lastname: {
         type: String
     },
-    dob: {
-        type: Date
+    age: {
+        type: Number
     },
     location: {
         type: String

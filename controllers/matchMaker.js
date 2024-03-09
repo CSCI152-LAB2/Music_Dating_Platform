@@ -2,30 +2,6 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-/*const getUsers = async (req, res) => {
-    const { username, topGenre } = req.body;
-    const uri = process.env.DATABASE_URI;
-    const databaseName = 'CadenceDB';
-
-    const client = new MongoClient(uri, { useNewUrlPrser: true, useUnifiedTopology: true });
-    client.connect();
-    console.log('Mongo connected from matchMaker') //used for debugging purposes
-
-    const getTotalUsers = async () => {
-        const database = client.db(databaseName);
-        const usersCollection = database.collection('users');
-        const totalUsers = await usersCollection.find({ topGenre }).toArray();
-        //const randomIndex = Math.floor(Math.random() * totalUsers);
-        //const randomUser = await usersCollection.findOne({}, { skip: randomIndex }); //returns random user
-
-        return totalUsers;  //array of users
-    }
-
-    const usersWithSameGenre = await getTotalUsers();
-    const randomIndex = Math.floor(Math.random() * usersWithSameGenre.length);
-    res.json({ "retrieved-user": usersWithSameGenre[randomIndex] });
-}*/
-
 const getUsers = async (req, res) => {
     console.log('getUsers running in backend');
     try {
@@ -44,29 +20,57 @@ const getUsers = async (req, res) => {
         const getTotalUsers = await User.find(
             { "topGenre": usersTopGenre }
         )
-        console.log(getTotalUsers);
-        res.send(getTotalUsers);
+        console.log('current user = ', currentUser);
+        let removedCurrUserArray = [];
+        console.log('\n\n------------getTotalUsers------------\n', getTotalUsers);
+        for (let foundUser of getTotalUsers) {
+            /*if (!currentUser.likedUsers.includes(foundUser.username) &&       leave this code commented while testing because there arent very many users and thus, an error will occur because the array could be empty
+                !currentUser.dislikedUsers.includes(foundUser.username) &&
+                foundUser.username !== username) {*/
+            removedCurrUserArray.push(foundUser);
+            //}
+        }
+
+        console.log('\n\n------------getTotalUsers after checking if a user exists in liked/disliked users and checking for current user in response------------\n', removedCurrUserArray);
+        res.send(removedCurrUserArray);
+
     } catch (err) {
         console.log(err.message)
     }
 }
 
 const postLikeDislike = async (req, res) => {
-    const { username, liked, disliked } = req.body; //username is the username of the user that is currently signed in, while
-    if (liked instanceof User) {                    // liked and dislike are the usernames of the users who the user has liked
+    console.log('postLikeDislike function run');
+    const { otherUserUsername, likedUser } = req.body;
+    console.log(`otherUserUsername is ${otherUserUsername} and likedUser is equal to ${likedUser}`); // for debugging
+    const token = req.cookies.token;
+    const { username } = jwt.verify(token, process.env.SECRET_STR);
+    console.log('username is equal to =', username);
+    if (likedUser == true) {
         const currentUser = await User.findOneAndUpdate(
-            { username: username },
-            { $push: { likedUsers: liked } },
-            { new: true }
+            { username },
+            { $push: { likedUsers: otherUserUsername } }
+            //{ new: true }
         )
-        res.status(200).json({ "message": `${liked} added to liked users for ${username}!` })
-    } else if (disliked instanceof User) {
+        console.log(`\n\n\nUpdated user: ${currentUser}`);
+        const findLikedUserObj = await User.findOne(
+            { username: otherUserUsername }
+        )
+        console.log("\n-----------findLikedUserObj has run-----------\n", findLikedUserObj);
+        if (findLikedUserObj.likedUsers.length !== 0 && findLikedUserObj.likedUsers.includes(username) && !findLikedUserObj.matchedUsers.includes(username)) {
+            console.log(`\n\n ----- updated user for ${username} and ${otherUserUsername} respectively, shown below -----`);
+            let updateMatchArrayUser = await User.findOneAndUpdate({ username }, { $push: { matchedUsers: otherUserUsername } });
+            let updateMatchArrayOtherUser = await User.findOneAndUpdate({ username: otherUserUsername }, { $push: { matchedUsers: username } });
+            console.log(updateMatchArrayUser, updateMatchArrayOtherUser);
+            //res.status(200).json({ "message": `${username} and ${otherUserUsername} have matched!` })
+        }
+        res.status(200).json({ "message": `${otherUserUsername} added to liked users for ${username}!` })
+    } else if (likedUser == false) {
         const currentUser = await User.findOneAndUpdate(
-            { username: username },
-            { $push: { dislikedUsers: disliked } },
-            { new: true }
+            { username },
+            { $push: { dislikedUsers: otherUserUsername } }
         )
-        res.status(200).json({ "message": `${disliked} added to disliked users for ${username}!` })
+        res.status(200).json({ "message": `${otherUserUsername} added to disliked users for ${username}!` })
     } else {
         res.status(400).json({ "message": "Error editing user on backend" });
     }

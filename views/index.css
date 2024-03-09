@@ -52,3 +52,15 @@ body {
     justify-content: space-around;
     width: 50%;
 }
+
+#user-details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 60%;
+}
+
+#user-details p {
+    width: calc(100%/3);
+    text-align: center;
+}

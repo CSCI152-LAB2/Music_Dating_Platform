@@ -10,31 +10,145 @@ const getSimilarUsers = async (req, res) => {
         })
 
         if (getUsers.ok) {
+            console.log('retrieving users from backend...');
             let responseData = await getUsers.json();
-            responseData.forEach(element => {
-                console.log(element.username, element.sex, element.topGenre);
-                handleDisplayUsers(element.username, element.sex, element.topGenre);
-            });
+            handleDisplayUsers(responseData[0]);
+            /*responseData.forEach(element => {
+                console.log(element.username, element.sex, element.topGenre, element.age, element.location, element.sexualPreference);
+                handleDisplayUsers(element);
+            });*/
+            console.log('getSimilarUsers function finished');
+            return responseData;
         }
-        console.log('getSimilarUsers function finished');
     } catch (err) {
         console.log(err);
     }
 }
 
-const handleDisplayUsers = (username, sex, topGenre) => {
-    // this function will be used to target HTML tags to display relevant data for users, will probably have to wait for some frontend stuff to be done before implementing
+const handleDisplayUsers = (userObj) => {
+    if (userObj === null) {
+        const showUsername = document.getElementById('showUsername').innerText = 'Not available';
+        const showSex = document.getElementById('showSex').innerText = 'Not available';
+        const showGenre = document.getElementById('showGenre').innerText = 'Not available';
+        const showAge = document.getElementById('showAge').innerText = 'Not available';
+        const showLocation = document.getElementById('showLocation').innerText = 'Not available';
+        const showSexualPreference = document.getElementById('showSexualPreference').innerText = 'Not available';
+        return;
+    }
+    const showUsername = document.getElementById('showUsername').innerText = userObj.username;
+    const showSex = document.getElementById('showSex').innerText = userObj.sex;
+    const showGenre = document.getElementById('showGenre').innerText = userObj.topGenre;
+    const showAge = document.getElementById('showAge').innerText = userObj.age;
+    const showLocation = document.getElementById('showLocation').innerText = userObj.location;
+    const showSexualPreference = document.getElementById('showSexualPreference').innerText = userObj.sexualPreference;
+    // will need one for displaying the respective user's profile pic
 }
 
-const likeOrDislike = async (req, res, like_or_dislike) => {
-    const token = jwt.verify(document.cookie.token, process.env.SECRET_STR);
-    const { username } = token;
+
+// need to run tests on this function once some of the styling for the main page is complete, buttons to like/dislike a user disappear after clicking 'search users' lol
+const likeOrDislike = async (like_or_dislike) => {
+    const otherUserUsername = document.getElementById('showUsername').innerText;
     switch (like_or_dislike) {
-        case "like":
-            console.log(username, ' liked this user');
+        case 'like':
+            console.log('User liked: ', otherUserUsername);
+            const sendLikedUser = await fetch('http://localhost:5501/index', {
+                method: 'PUT',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ otherUserUsername, "likedUser": true })
+            })
+            console.log('REQUEST FROM likeOrDislike FUNCTION - frontend:');
+            console.log(sendLikedUser);
             break;
-        case "dislike":
-            console.log(username, ' disliked this user');
+        case 'dislike':
+            console.log('User disliked: ', otherUserUsername);
+            const sendDislikedUser = await fetch('http://localhost:5501/index', {
+                method: 'PUT',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ otherUserUsername, "likedUser": false })
+            })
             break;
     }
+    // needs logic for adding user to liked / disliked arrays in user model in database
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const indexDriverFunction = async () => {
+        let userArr = [];
+        const showUsers = document.getElementById('search-button');
+        const like_button = document.getElementById('like-button');
+        const dislike_button = document.getElementById('next-button');
+        const previous_button = document.getElementById('previous-button');
+        let currIndex = 0;
+
+        showUsers.addEventListener('click', async () => {
+            userArr = await getSimilarUsers();
+            console.log(userArr);
+            if (userArr.length > 0) {
+                handleDisplayUsers(userArr[currIndex]);
+            } else {
+                handleDisplayUsers(null);
+                alert('Sorry, no users found');
+            }
+        })
+
+        like_button.addEventListener('click', async () => {
+            await likeOrDislike("like");
+            currIndex++;
+            if (currIndex < userArr.length) {
+                handleDisplayUsers(userArr[currIndex]);
+            } else {
+                handleDisplayUsers(null);
+                alert('Sorry, you have gone through all of the users. There are no more users to display')
+            }
+        })
+
+        dislike_button.addEventListener('click', async () => {
+            await likeOrDislike("dislike");
+            currIndex++;
+            if (currIndex < userArr.length) {
+                handleDisplayUsers(userArr[currIndex]);
+            } else {
+                handleDisplayUsers(null);
+                alert('Sorry, you have gone through all of the users. There are no more users to display')
+            }
+        })
+
+        previous_button.addEventListener('click', () => {
+            currIndex--;
+            if (currIndex < 0) {
+                currIndex = 0;
+                alert('There are no more previous users to see');
+                return;
+            } else {                            //
+                handleDisplayUsers(userArr[currIndex]);
+                like_button.addEventListener('click', async () => {
+                    await likeOrDislike("like");
+                    currIndex++;
+                    if (currIndex < userArr.length) {
+                        handleDisplayUsers(userArr[currIndex]);
+                    } else {
+                        handleDisplayUsers(null);
+                        alert('Sorry, you have gone through all of the users. There are no more users to display')
+                    }
+                })
+
+                dislike_button.addEventListener('click', async () => {
+                    await likeOrDislike("dislike");
+                    currIndex++;
+                    if (currIndex < userArr.length) {
+                        handleDisplayUsers(userArr[currIndex]);
+                    } else {
+                        handleDisplayUsers(null);
+                        alert('Sorry, you have gone through all of the users. There are no more users to display')
+                    }
+                })
+            }   //
+        })
+    }
+
+    indexDriverFunction();
+})
