@@ -57,21 +57,12 @@ const postLikeDislike = async (req, res) => {
             { username: otherUserUsername }
         )
         console.log("\n-----------findLikedUserObj has run-----------\n", findLikedUserObj);
-        if (findLikedUserObj.likedUsers.length !== 0 && findLikedUserObj.likedUsers.includes(username)) {
-            const updates = [
-                {
-                    filter: { username: username },
-                    update: { $push: { matchedUsers: otherUserUsername } }
-                },
-                {
-                    filter: { username: otherUserUsername },
-                    update: { $push: { matchedUsers: username } }
-                }
-            ]
-            console.log('\n\n ----- updates array is -----', updates);
-            let updateMatchArray = await User.updateMany(updates.map(({ filter, update }) => ({ filter, update })));
-            console.log("\n -----------Updated users after they match-----------", updateMatchArray);
-            res.status(200).json({ "message": `${username} and ${otherUserUsername} have matched!` })
+        if (findLikedUserObj.likedUsers.length !== 0 && findLikedUserObj.likedUsers.includes(username) && !findLikedUserObj.matchedUsers.includes(username)) {
+            console.log(`\n\n ----- updated user for ${username} and ${otherUserUsername} respectively, shown below -----`);
+            let updateMatchArrayUser = await User.findOneAndUpdate({ username }, { $push: { matchedUsers: otherUserUsername } });
+            let updateMatchArrayOtherUser = await User.findOneAndUpdate({ username: otherUserUsername }, { $push: { matchedUsers: username } });
+            console.log(updateMatchArrayUser, updateMatchArrayOtherUser);
+            //res.status(200).json({ "message": `${username} and ${otherUserUsername} have matched!` })
         }
         res.status(200).json({ "message": `${otherUserUsername} added to liked users for ${username}!` })
     } else if (likedUser == false) {
