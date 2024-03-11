@@ -7,6 +7,7 @@
     <title>Profile</title>
     <link rel=stylesheet href="profile.css">
     <script src="profile.js"></script>
+    <script src="uploadImage.js" defer></script>
 </head>
 
 <body onload="getProfileData()">
@@ -20,6 +21,10 @@
             <p id="profile-genre">Your top genre here</p>
             <p id="profile-location">Your location here</p>
             <p id="profile-sexualpreference">Your sexual preference here</p>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <input type="file" id="profilePic" name="photo" accept="image/*">
+                <button type="submit">Upload Photo</button>
+            </form>
         </div>
     </div>
 </body>
