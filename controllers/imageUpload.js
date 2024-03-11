@@ -1,16 +1,18 @@
-const multer = require('multer');
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
+const multer = require('multer');
 
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, 'uploads');
+    destination: function (req, file, cb) {
+        cb(null, '../uploads/')
     },
-    filename: function(req, file, cb) {
-        cb(null, new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname);
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        cb(null, file.fieldname + '-' + uniqueSuffix)
     }
-});
+})
 
-const upload = multer({ storage: storage }).single('photo');
+const upload = multer({ dest: 'uploads/'}).single('avatar');
 
 exports.uploadPhoto = (req, res) => {
     upload(req, res, async (err) => {
@@ -22,7 +24,14 @@ exports.uploadPhoto = (req, res) => {
         }
 
         try {
-            const user = await User.findById(req.params.userId);
+            const verified_jwt = jwt.verify(req.cookies.token, process.env.SECRET_STR);
+            if (verified_jwt) {
+                console.log('JWT successfully verified');
+            } else {
+                return res.redirect('/login');
+            }
+            const { username } = verified_jwt;
+            const user = await User.findOne({ username });
             if (!user) {
                 return res.status(404).send('User not found');
             }
