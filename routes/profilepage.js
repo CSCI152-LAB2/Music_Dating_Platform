@@ -10,6 +10,7 @@ const authUser = require('../middlewares/verifyJWT');
 })*/
 
 router.get('^/$|/profile(.html)?', getProfile);
-router.post('/upload', authUser.verifyCookie, imageUpload.uploadPhoto);
+//router.post('/upload', authUser.verifyCookie, imageUpload.uploadPhoto);
+router.post('/upload', imageUpload.uploadPhoto);
 
 module.exports = router;

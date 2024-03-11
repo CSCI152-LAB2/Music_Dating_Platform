@@ -21,8 +21,8 @@
             <p id="profile-genre">Your top genre here</p>
             <p id="profile-location">Your location here</p>
             <p id="profile-sexualpreference">Your sexual preference here</p>
-            <form id="uploadForm" enctype="multipart/form-data">
-                <input type="file" id="profilePic" name="photo" accept="image/*">
+            <form method="POST" action="/profile/upload" enctype="multipart/form-data">
+                <input type="file" name="avatar"> 
                 <button type="submit">Upload Photo</button>
             </form>
         </div>
