@@ -84,71 +84,42 @@ document.addEventListener('DOMContentLoaded', () => {
         const previous_button = document.getElementById('previous-button');
         let currIndex = 0;
 
+        const updateDisplay = () => {
+            if (currIndex < userArr.length && currIndex >= 0) {
+                handleDisplayUsers(userArr[currIndex]);
+            } else {
+                handleDisplayUsers(null); // Handle edge cases when array is out of bounds
+                if (currIndex < 0) {
+                    currIndex = 0; // Reset to the first user if we try to go back past the first user
+                }
+                alert('Sorry, there are no more users to display');
+            }
+        };
+
         showUsers.addEventListener('click', async () => {
             userArr = await getSimilarUsers();
             console.log(userArr);
-            if (userArr.length > 0) {
-                handleDisplayUsers(userArr[currIndex]);
-            } else {
-                handleDisplayUsers(null);
-                alert('Sorry, no users found');
-            }
-        })
+            currIndex = 0; // Reset index on new search
+            updateDisplay();
+        });
 
         like_button.addEventListener('click', async () => {
             await likeOrDislike("like");
             currIndex++;
-            if (currIndex < userArr.length) {
-                handleDisplayUsers(userArr[currIndex]);
-            } else {
-                handleDisplayUsers(null);
-                alert('Sorry, you have gone through all of the users. There are no more users to display')
-            }
-        })
+            updateDisplay();
+        });
 
         dislike_button.addEventListener('click', async () => {
             await likeOrDislike("dislike");
             currIndex++;
-            if (currIndex < userArr.length) {
-                handleDisplayUsers(userArr[currIndex]);
-            } else {
-                handleDisplayUsers(null);
-                alert('Sorry, you have gone through all of the users. There are no more users to display')
-            }
-        })
+            updateDisplay();
+        });
 
         previous_button.addEventListener('click', () => {
             currIndex--;
-            if (currIndex < 0) {
-                currIndex = 0;
-                alert('There are no more previous users to see');
-                return;
-            } else {                            //
-                handleDisplayUsers(userArr[currIndex]);
-                like_button.addEventListener('click', async () => {
-                    await likeOrDislike("like");
-                    currIndex++;
-                    if (currIndex < userArr.length) {
-                        handleDisplayUsers(userArr[currIndex]);
-                    } else {
-                        handleDisplayUsers(null);
-                        alert('Sorry, you have gone through all of the users. There are no more users to display')
-                    }
-                })
-
-                dislike_button.addEventListener('click', async () => {
-                    await likeOrDislike("dislike");
-                    currIndex++;
-                    if (currIndex < userArr.length) {
-                        handleDisplayUsers(userArr[currIndex]);
-                    } else {
-                        handleDisplayUsers(null);
-                        alert('Sorry, you have gone through all of the users. There are no more users to display')
-                    }
-                })
-            }   //
-        })
-    }
+            updateDisplay();
+        });
+    };
 
     indexDriverFunction();
-})
+});
