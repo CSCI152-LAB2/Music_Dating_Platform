@@ -15,12 +15,16 @@
       #messages > li { padding: 0.5rem 1rem; }
       #messages > li:nth-child(odd) { background: #efefef; }
     </style>
-    <script src="../server.js"></script>
-    <script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
       /*const socket = io("https://localhost:5501", {
         path: "/message"
       });*/
-      const socket = io();
+      let socket = io()
+
+      socket.on('connection', () => {
+        console.log('Connected to the server');
+      })
     </script>
   </head>
   <body>
