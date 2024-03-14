@@ -10,19 +10,16 @@ const PORT = process.env.PORT || 5501;
 const cors = require('cors');
 const session = require('express-session')
 const http = require('http');
-const { Server } = require('socket.io');
+const socketIO = require('socket.io');
 const { verifyCookie } = require('./middlewares/verifyJWT');
 const cookieParser = require('cookie-parser')
 
 app.use(cors());
 
 const server = http.createServer(app);
-const io = new Server(server);
-/*const io = new Server(server, {
-    path: "/message"
-});*/
+const io = socketIO(server);
+
 connectDB();
-//app.use(cors());
 app.use(cookieParser())
 
 app.use(express.json()) //parses the data in POST and PUT requests which allows us to extract information from the request body
@@ -61,7 +58,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 mongoose.connection.once('open', () => {
     console.log('connected to mongoDB');
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
         console.log(`server running on port: ${PORT}`);
     })
 }).on('error', (err) => {
