@@ -14,12 +14,15 @@ const { Server } = require('socket.io');
 const { verifyCookie } = require('./middlewares/verifyJWT');
 const cookieParser = require('cookie-parser')
 
-console.log('test');
+app.use(cors());
 
 const server = http.createServer(app);
 const io = new Server(server);
+/*const io = new Server(server, {
+    path: "/message"
+});*/
 connectDB();
-app.use(cors());
+//app.use(cors());
 app.use(cookieParser())
 
 app.use(express.json()) //parses the data in POST and PUT requests which allows us to extract information from the request body
@@ -29,15 +32,18 @@ app.use(express.static('views'));
 
 io.on('connection', (socket) => {
     console.log('user connected');
+    socket.on('disconnect', () => {
+        console.log('user has disconnected');
+    })
 
-    socket.on('joinRoom', (room) => {
+    /*socket.on('joinRoom', (room) => {
         socket.join(room);
         socket.emit('message', 'Welcome to the chat');
     })
 
     socket.on('disconnect', () => {
         console.log('user disconnected');
-    })
+    })*/
 })
 
 app.use('/signup', require('./routes/signup'));
