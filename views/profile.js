@@ -29,4 +29,5 @@ const handleDisplayProfile = (user) => {                    //gonna come up with
     document.getElementById('profile-genre').innerText = user.topGenre;
     document.getElementById('profile-location').innerText = user.location;
     document.getElementById('profile-sexualpreference').innerText = user.sexualPreference;
+    document.getElementById('profile_pic').src = user.profilePic;
 }
