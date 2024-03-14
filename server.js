@@ -57,6 +57,7 @@ app.use('/index', require('./routes/mainpage'));
 //app.use('/main', require('./routes/mainpage'));
 app.use('/message', require('./routes/messages'));
 app.use('/profile', require('./routes/profilepage'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 mongoose.connection.once('open', () => {
     console.log('connected to mongoDB');
