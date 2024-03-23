@@ -14,6 +14,7 @@ const socketIO = require('socket.io');
 const { verifyCookie } = require('./middlewares/verifyJWT');
 const cookieParser = require('cookie-parser')
 
+
 app.use(cors());
 
 const server = http.createServer(app);
@@ -27,10 +28,16 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static('views'));
 
+let connectionNumber = 0;
 io.on('connection', (socket) => {
+    connectionNumber++;
     console.log('user connected');
+    socket.on('chat message', (msg) => {
+        console.log('message: ', msg);
+        io.emit('chat message', msg);
+    })
     socket.on('disconnect', () => {
-        console.log('user has disconnected');
+        console.log(`user ${connectionNumber} has disconnected`);
     })
 
     /*socket.on('joinRoom', (room) => {
