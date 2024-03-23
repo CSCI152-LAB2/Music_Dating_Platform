@@ -31,13 +31,13 @@ app.use(express.static('views'));
 let connectionNumber = 0;
 io.on('connection', (socket) => {
     connectionNumber++;
-    console.log('user connected');
+    console.log(`user ${connectionNumber} connected`);
     socket.on('chat message', (msg) => {
         console.log('message: ', msg);
         io.emit('chat message', msg);
     })
     socket.on('disconnect', () => {
-        console.log(`user ${connectionNumber} has disconnected`);
+        console.log(`user has disconnected`);
     })
 
     /*socket.on('joinRoom', (room) => {
