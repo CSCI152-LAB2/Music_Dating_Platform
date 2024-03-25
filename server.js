@@ -10,14 +10,17 @@ const PORT = process.env.PORT || 5501;
 const cors = require('cors');
 const session = require('express-session')
 const http = require('http');
-const { Server } = require('socket.io');
+const socketIO = require('socket.io');
 const { verifyCookie } = require('./middlewares/verifyJWT');
 const cookieParser = require('cookie-parser')
 
-const server = http.createServer(app);
-const io = new Server(server);
-connectDB();
+
 app.use(cors());
+
+const server = http.createServer(app);
+const io = socketIO(server);
+
+connectDB();
 app.use(cookieParser())
 
 app.use(express.json()) //parses the data in POST and PUT requests which allows us to extract information from the request body
@@ -25,17 +28,26 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static('views'));
 
+let connectionNumber = 0;
 io.on('connection', (socket) => {
-    console.log('user connected');
+    connectionNumber++;
+    console.log(`user ${connectionNumber} connected`);
+    socket.on('chat message', (msg) => {
+        console.log('message: ', msg);
+        io.emit('chat message', msg);
+    })
+    socket.on('disconnect', () => {
+        console.log(`user has disconnected`);
+    })
 
-    socket.on('joinRoom', (room) => {
+    /*socket.on('joinRoom', (room) => {
         socket.join(room);
         socket.emit('message', 'Welcome to the chat');
     })
 
     socket.on('disconnect', () => {
         console.log('user disconnected');
-    })
+    })*/
 })
 
 app.use('/signup', require('./routes/signup'));
@@ -49,10 +61,11 @@ app.use('/index', require('./routes/mainpage'));
 //app.use('/main', require('./routes/mainpage'));
 app.use('/message', require('./routes/messages'));
 app.use('/profile', require('./routes/profilepage'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 mongoose.connection.once('open', () => {
     console.log('connected to mongoDB');
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
         console.log(`server running on port: ${PORT}`);
     })
 }).on('error', (err) => {
