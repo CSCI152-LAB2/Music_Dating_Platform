@@ -27,10 +27,16 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static('views'));
 
+let connectionNumber = 0;
 io.on('connection', (socket) => {
-    console.log('user connected');
+    connectionNumber++;
+    console.log(`user ${connectionNumber} connected`);
+    socket.on('chat message', (msg) => {
+        console.log('message: ', msg);              // for testing purposes
+        io.emit('chat message', msg);
+    })
     socket.on('disconnect', () => {
-        console.log('user has disconnected');
+        console.log(`user has disconnected`);
     })
 
     /*socket.on('joinRoom', (room) => {
