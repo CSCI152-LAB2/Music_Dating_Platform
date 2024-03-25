@@ -33,7 +33,7 @@ io.on('connection', (socket) => {
     connectionNumber++;
     console.log(`user ${connectionNumber} connected`);
     socket.on('chat message', (msg) => {
-        console.log('message: ', msg);
+        console.log('message: ', msg);              // for testing purposes
         io.emit('chat message', msg);
     })
     socket.on('disconnect', () => {
