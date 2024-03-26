@@ -9,11 +9,12 @@ const archiveChat = async (req, res) => {
         return res.redirect('/login');
     }
     console.log(chatMessage);       // for testing purposes
-    const { username } = verified_token;
+    //const { username } = verified_token;
 
     /*const findUserChatLogs = await ChatModel.findOneAndUpdate(
         { username }
     )*/
+    return;
 }
 
 module.exports = { archiveChat };
