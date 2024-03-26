@@ -14,7 +14,6 @@ const socketIO = require('socket.io');
 const { verifyCookie } = require('./middlewares/verifyJWT');
 const cookieParser = require('cookie-parser')
 
-
 app.use(cors());
 
 const server = http.createServer(app);
