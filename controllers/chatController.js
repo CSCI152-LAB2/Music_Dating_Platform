@@ -3,17 +3,18 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
 const archiveChat = async (req, res) => {
-    const {chatMessage} = req.body;
+    const {otherUser, chatMessage} = req.body;
     const verified_token = jwt.verify(req.cookies.token, process.env.SECRET_STR)
     if (!verified_token) {
         return res.redirect('/login');
     }
-    console.log(chatMessage);       // for testing purposes
+    console.log('from backend - message = ', chatMessage);       // for testing purposes
     const { username } = verified_token;
-
-    /*const findUserChatLogs = await ChatModel.findOneAndUpdate(
-        { username }
-    )*/
+    let chatName = otherUser + username;
+    const sendMsgToDB = await ChatModel.findOneAndUpdate(
+        {username}
+    )
+    res.status(200).json('Succesfully added message to DB');
 }
 
 module.exports = { archiveChat };
