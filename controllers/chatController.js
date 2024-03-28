@@ -31,19 +31,50 @@ const archiveChat = async (req, res) => {
     console.log('otherUser email is = ', otherUserObject.email);
     let chatName = currentUser.email + otherUserObject.email;
     console.log('chatName = ', chatName);
-    let sendMsgToDB = await Chat.findOneAndUpdate(
-        { chatname: chatName },
-        { $push: { chats: messageObj } }
-    )
 
-    if (sendMsgToDB == null) {
+    const checkIfChatExists = await Chat.findOne(
+        { chatname: chatName }
+    );
+
+    if (checkIfChatExists == null) {
         sendMsgToDB = await Chat.create(
             { chatname: chatName },
             { $push: { chats: messageObj } }
         )
+    } else {
+        let sendMsgToDB = await Chat.findOneAndUpdate(
+            { chatname: chatName },
+            { $push: { chats: messageObj } }
+        )
+        console.log(sendMsgToDB);               // this works but for some reason will not show the most recent message sent
     }
-    console.log(sendMsgToDB);
+
     res.status(200).json({ 'Message': 'Succesfully added message to DB' });
 }
 
-module.exports = { archiveChat };
+const getChats = async (req, res) => {
+    const otheruser = req.query.otheruser;
+    console.log('from backend getChats otherUser = ', otheruser);
+    const verified_token = jwt.verify(req.cookies.token, process.env.SECRET_STR);
+    if (!verified_token) {
+        return res.redirect('/login');
+    }
+    const { username } = verified_token;
+
+    const getUserObject = await User.findOne(
+        { username }
+    )
+
+    const getOtherUserObject = await User.findOne(
+        { username: otheruser }
+    )
+
+    const chatName = getUserObject.email + getOtherUserObject.email;
+    const findChat = await Chat.findOne(
+        { chatname: chatName }
+    )
+    console.log(findChat);
+    res.status(200).json(findChat);
+}
+
+module.exports = { archiveChat, getChats };

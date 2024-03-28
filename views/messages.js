@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   socket.on('chat message', async (msg) => {
     const sendMsgToDB = await fetch('http://localhost:5501/message', {
-      method: 'PUT',
+      method: 'POST',
       headers: {
         "Content-Type": "application/json"
       },
@@ -40,13 +40,16 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 })
 
-const storeMessageInDB = () => {
-  // To-Do
+const getOldMessages = async (req, res) => {
+  console.log('getOldMessages ran');
+  const getMessagesFromDB = await fetch(`http://localhost:5501/message?otheruser=${otherUsername}`, {
+    method: 'GET',
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }).catch(error => {
+    console.log("Error retrieving older messages - ", error);
+  })
 }
-
-const getOldMesssages = () => {
-  // To-Do
-}
-
 //might need more functions but this should be good for now
 
