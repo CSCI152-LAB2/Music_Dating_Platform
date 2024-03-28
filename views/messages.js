@@ -1,15 +1,15 @@
 let globalOtherUsername = "";   // this is ugly, I'm lazy
 
 document.addEventListener('DOMContentLoaded', () => {
-    let socket = io()
-    const form = document.getElementById('form');
-    const input = document.getElementById('input');
-    const messages = document.getElementById('messages');
-    const otherUsername = document.getElementById('otherUsername').innerText;
-    globalOtherUsername = otherUsername;
-    socket.on('connection', () => {
-      console.log('Connected to the server');
-    })
+  let socket = io()
+  const form = document.getElementById('form');
+  const input = document.getElementById('input');
+  const messages = document.getElementById('messages');
+  const otherUsername = document.getElementById('otherUsername').innerText;
+  globalOtherUsername = otherUsername;
+  socket.on('connection', () => {
+    console.log('Connected to the server');
+  })
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -50,11 +50,15 @@ const getOldMessages = async (req, res) => {
     headers: {
       "Content-Type": "application/json"
     }
-  }).then(response => {return response.json()})     //used for testing purposes
-    .then(data => {console.log(data)})
+  }).then(response => { return response.json() })     //used for testing purposes
+    .then(data => { console.log(data) })
     .catch(error => {
-    console.log("Error retrieving older messages - ", error);
-  })
+      console.log("Error retrieving older messages - ", error);
+    })
 }
-//might need more functions but this should be good for now
 
+const displayMessages = (chatsArray) => {
+  for (let i = 0; i < chatsArray.length; i++) {
+    //if (chatsArray[i].sentBy)
+  }
+}

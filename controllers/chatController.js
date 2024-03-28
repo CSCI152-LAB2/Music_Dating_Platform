@@ -61,22 +61,22 @@ const getChats = async (req, res) => {
     }
 
     try {
-    const { username } = verified_token;
+        const { username } = verified_token;
 
-    const getUserObject = await User.findOne(
-        { username }
-    )
+        const getUserObject = await User.findOne(
+            { username }
+        )
 
-    const getOtherUserObject = await User.findOne(
-        { username: otheruser }
-    )
+        const getOtherUserObject = await User.findOne(
+            { username: otheruser }
+        )
 
-    const chatName = getUserObject.email + getOtherUserObject.email;
-    const findChat = await Chat.findOne(
-        { chatname: chatName }
-    )
-    console.log(findChat);
-    res.status(200).send(findChat);
+        const chatName = getUserObject.email + getOtherUserObject.email;
+        const findChat = await Chat.findOne(
+            { chatname: chatName }
+        )
+        console.log(findChat);
+        res.status(200).send(findChat);
     } catch (err) {
         console.log('Error sending chats', err);
     }
