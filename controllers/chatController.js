@@ -59,6 +59,8 @@ const getChats = async (req, res) => {
     if (!verified_token) {
         return res.redirect('/login');
     }
+
+    try {
     const { username } = verified_token;
 
     const getUserObject = await User.findOne(
@@ -74,7 +76,10 @@ const getChats = async (req, res) => {
         { chatname: chatName }
     )
     console.log(findChat);
-    res.status(200).json(findChat);
+    res.status(200).send(findChat);
+    } catch (err) {
+        console.log('Error sending chats', err);
+    }
 }
 
 module.exports = { archiveChat, getChats };

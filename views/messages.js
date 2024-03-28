@@ -1,9 +1,12 @@
+let globalOtherUsername = "";   // this is ugly, I'm lazy
+
 document.addEventListener('DOMContentLoaded', () => {
     let socket = io()
     const form = document.getElementById('form');
     const input = document.getElementById('input');
     const messages = document.getElementById('messages');
     const otherUsername = document.getElementById('otherUsername').innerText;
+    globalOtherUsername = otherUsername;
     socket.on('connection', () => {
       console.log('Connected to the server');
     })
@@ -42,12 +45,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const getOldMessages = async (req, res) => {
   console.log('getOldMessages ran');
-  const getMessagesFromDB = await fetch(`http://localhost:5501/message?otheruser=${otherUsername}`, {
+  const getMessagesFromDB = await fetch(`http://localhost:5501/message?otheruser=${globalOtherUsername}`, {
     method: 'GET',
     headers: {
       "Content-Type": "application/json"
     }
-  }).catch(error => {
+  }).then(response => {return response.json()})     //used for testing purposes
+    .then(data => {console.log(data)})
+    .catch(error => {
     console.log("Error retrieving older messages - ", error);
   })
 }
