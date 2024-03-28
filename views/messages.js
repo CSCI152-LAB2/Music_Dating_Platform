@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let socket = io()
     const form = document.getElementById('form');
     const input = document.getElementById('input');
-    const messages = document.getElementById('messages');
+    const messages = document.getElementById('messages');z
     socket.on('connection', () => {
       console.log('Connected to the server');
     })
