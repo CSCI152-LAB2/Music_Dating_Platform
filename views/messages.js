@@ -58,7 +58,14 @@ const getOldMessages = async (req, res) => {
 }
 
 const displayMessages = (chatsArray) => {
+  let chat = document.getElementById('messages');
   for (let i = 0; i < chatsArray.length; i++) {
     //if (chatsArray[i].sentBy)
+    let oldMessage = document.createElement('li');
+    appendMessage.innerText = chatsArray[i].message;
+    chat.appendChild(oldMessage);
+    // need to add custom CSS for showing the messages sent by the currently logged in user
+    // on the right and the user whose messages they're viewing on the left
   }
+
 }
