@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken')
 
-const verifyCookie = (req, res, next) => {
-    const { token } = req.body
+const verifyCookie = async (req, res, next) => {
+    //const { token } = req.body
+    const token = req.cookies.token;
     try {
         const verified_token = jwt.verify(token, process.env.SECRET_STR)
         if (verified_token) {

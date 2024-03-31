@@ -12,7 +12,9 @@ const session = require('express-session')
 const http = require('http');
 const socketIO = require('socket.io');
 const { verifyCookie } = require('./middlewares/verifyJWT');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const { findOneAndUpdate } = require('./models/ChatModel');
+const jwt = require('jsonwebtoken');
 
 app.use(cors());
 
@@ -28,15 +30,25 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static('views'));
 
 let connectionNumber = 0;
-io.on('connection', (socket) => {
+io.on('connect', async (socket) => {
     connectionNumber++;
-    console.log(`user ${connectionNumber} connected`);
+    console.log(`user ${connectionNumber} connected with id: ${socket.id}`);
+    socket.on('auth', async (token) => {
+        const verified_token = jwt.verify(token, process.env.SECRET_STR);
+        const { username } = verified_token;
+        console.log('authorized connection');
+        console.log('\n\n', username, '\n\n');
+        const addSocketIDtoUser = await User.findOne(
+            { username }
+        )
+        console.log("\n\n ----------------USER MODEL AFTER CONNECTING TO MESSAGES-------------", addSocketIDtoUser);
+    })
     socket.on('chat message', (msg) => {
-        console.log('message: ', msg);              // for testing purposes
+        console.log(`message from ${socket.id} : `, msg);              // for testing purposes
         io.emit('chat message', msg);
     })
     socket.on('disconnect', () => {
-        console.log(`user has disconnected`);
+        console.log(`user with id ${socket.id} has disconnected`);
     })
 
     /*socket.on('joinRoom', (room) => {

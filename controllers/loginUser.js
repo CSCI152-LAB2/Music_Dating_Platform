@@ -22,7 +22,7 @@ const loginUser = async (req, res) => {
                 });
 
                 res.cookie("token", token, {
-                    httpOnly: true
+                    httpOnly: false
                 })
                 console.log(({ "Success": "User logged in", "token": token, "User": user }))
                 return res.json({ "Success": "User logged in", "token": token, "User": user });

@@ -7,7 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const messages = document.getElementById('messages');
   const otherUsername = document.getElementById('otherUsername').innerText;
   globalOtherUsername = otherUsername;
-  socket.on('connection', () => {
+  const token = document.cookie.split('; ')
+    .find(row => row.startsWith('token='))
+    .split('=')[1];
+  socket.on('connect', () => {
+    console.log('frontend connection has run. Token = ', token);
+    socket.emit('auth', token);
     console.log('Connected to the server');
   })
 
@@ -67,5 +72,4 @@ const displayMessages = (chatsArray) => {
     // need to add custom CSS for showing the messages sent by the currently logged in user
     // on the right and the user whose messages they're viewing on the left
   }
-
 }
