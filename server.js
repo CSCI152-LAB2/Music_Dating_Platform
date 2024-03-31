@@ -29,25 +29,31 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static('views'));
 
+let username = "";
 let connectionNumber = 0;
 io.on('connect', async (socket) => {
     connectionNumber++;
     console.log(`user ${connectionNumber} connected with id: ${socket.id}`);
     socket.on('auth', async (token) => {
         const verified_token = jwt.verify(token, process.env.SECRET_STR);
-        const { username } = verified_token;
+        ({ username } = verified_token);
         console.log('authorized connection');
         console.log('\n\n', username, '\n\n');
-        const addSocketIDtoUser = await User.findOne(
-            { username }
+        const addSocketIDtoUser = await User.findOneAndUpdate(
+            { username },
+            { $set: { currentSocketID: socket.id } }
         )
-        console.log("\n\n ----------------USER MODEL AFTER CONNECTING TO MESSAGES-------------", addSocketIDtoUser);
+        // verified that the socket ID gets sent to the database
     })
     socket.on('chat message', (msg) => {
         console.log(`message from ${socket.id} : `, msg);              // for testing purposes
         io.emit('chat message', msg);
     })
-    socket.on('disconnect', () => {
+    socket.on('disconnect', async () => {
+        const removeSocketIDfromUser = await User.findOneAndUpdate(
+            { username },
+            { $set: { currentSocketID: null } }
+        )
         console.log(`user with id ${socket.id} has disconnected`);
     })
 

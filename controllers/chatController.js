@@ -2,6 +2,14 @@ const Chat = require('../models/ChatModel');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
+const getUser = async (req, res) => {
+    const { otherUsername } = req.body;
+    const otherUser = User.findOne(
+        { username: otherUsername }
+    )
+    res.status(200).send(otherUser);
+}
+
 const archiveChat = async (req, res) => {
     //const { otherUser, chatMessage, sentBy } = req.body;
     const { otherUser, chatMessage } = req.body;
@@ -76,10 +84,14 @@ const getChats = async (req, res) => {
             { chatname: chatName }
         )
         console.log(findChat);
-        res.status(200).send(findChat);
+        const payload = {
+            otherUserObject: getOtherUserObject,
+            chats: findChat
+        }
+        res.status(200).send(payload);
     } catch (err) {
         console.log('Error sending chats', err);
     }
 }
 
-module.exports = { archiveChat, getChats };
+module.exports = { archiveChat, getChats, getUser };
