@@ -11,8 +11,7 @@ const getUser = async (req, res) => {
 }
 
 const archiveChat = async (req, res) => {
-    //const { otherUser, chatMessage, sentBy } = req.body;
-    const { otherUser, chatMessage } = req.body;
+    const { otherUser, chatMessage, sentBy } = req.body;
     const verified_token = jwt.verify(req.cookies.token, process.env.SECRET_STR);
     if (!verified_token) {
         return res.redirect('/login');
@@ -30,7 +29,7 @@ const archiveChat = async (req, res) => {
     );
 
     const messageObj = {
-        //from: sentBy,
+        from: sentBy,
         message: chatMessage
     }
 
