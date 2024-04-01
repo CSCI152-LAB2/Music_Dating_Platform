@@ -45,9 +45,20 @@ io.on('connect', async (socket) => {
         )
         // verified that the socket ID gets sent to the database
     })
-    socket.on('chat message', (msg) => {
-        console.log(`message from ${socket.id} : `, msg);              // for testing purposes
-        io.emit('chat message', msg);
+
+    socket.on('join room', (room) => {
+        socket.join(room);
+        console.log(`${socket.id} joined room ${room}`)
+    })
+
+    socket.on('leave room', (room) => {
+        socket.leave(room);
+        console.log(`${socket.id} left room ${room}`)
+    })
+
+    socket.on('chat message', (room, msg) => {
+        console.log(`message from ${socket.id} to room: ${room} = `, msg);              // for testing purposes
+        io.to(room).emit('chat message', msg);
     })
     socket.on('disconnect', async () => {
         const removeSocketIDfromUser = await User.findOneAndUpdate(
