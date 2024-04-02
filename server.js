@@ -31,7 +31,7 @@ app.use(express.static('views'));
 
 let username = "";
 let connectionNumber = 0;
-io.on('connect', async (socket) => {
+io.on('connect', socket => {
     connectionNumber++;
     console.log(`user ${connectionNumber} connected with id: ${socket.id}`);
     socket.on('auth', async (token) => {
@@ -44,9 +44,17 @@ io.on('connect', async (socket) => {
             { $set: { currentSocketID: socket.id } }
         )
         // verified that the socket ID gets sent to the database
+        const userObj = await User.findOne(
+            { username }
+        )
+        console.log(userObj);
+        socket.on('chat message', (msg, room) => {
+            console.log(`message from ${socket.id} to room: ${room} = `, msg);              // for testing purposes
+            socket.to(room).emit('receive message', msg);
+        })
     })
 
-    socket.on('join room', (room) => {
+    /*socket.on('join room', (room) => {
         socket.join(room);
         console.log(`${socket.id} joined room ${room}`)
     })
@@ -54,18 +62,22 @@ io.on('connect', async (socket) => {
     socket.on('leave room', (room) => {
         socket.leave(room);
         console.log(`${socket.id} left room ${room}`)
-    })
+    })*/
 
-    socket.on('chat message', (room, msg) => {
-        console.log(`message from ${socket.id} to room: ${room} = `, msg);              // for testing purposes
-        io.to(room).emit('chat message', msg);
-    })
-    socket.on('disconnect', async () => {
-        const removeSocketIDfromUser = await User.findOneAndUpdate(
-            { username },
-            { $set: { currentSocketID: null } }
-        )
-        console.log(`user with id ${socket.id} has disconnected`);
+    /*socket.on('chat message', (msg) => {
+        console.log(`message from ${socket.id} = `, msg);              // for testing purposes
+        //io.to(room).emit('chat message', msg);
+    })*/
+    socket.on('disconnect', () => {
+        const removeSocket = async () => {
+            const removeSocketIDfromUser = await User.findOneAndUpdate(
+                { username },
+                { $set: { currentSocketID: null } }
+            )
+            console.log(`user with id ${socket.id} has disconnected`);
+        }
+        removeSocket();
+        console.log('Socket removed from user');
     })
 
     /*socket.on('joinRoom', (room) => {

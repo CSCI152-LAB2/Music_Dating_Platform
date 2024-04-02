@@ -1,4 +1,4 @@
-const displayMessages = (chatsArray) => {
+const displayOldMessages = (chatsArray) => {
   let chat = document.getElementById('messages');
   for (let i = 0; i < chatsArray.length; i++) {
     //if (chatsArray[i].sentBy)
@@ -10,35 +10,17 @@ const displayMessages = (chatsArray) => {
   }
 }
 
-/*socket.on('chat message', async (msg) => {
-  const sendMsgToDB = await fetch('http://localhost:5501/message', {
-    method: 'POST',
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      otherUser: otherUsername,
-      chatMessage: msg
-      //sentBy:       <-- need to figure out how I'm gonna implement this
-    })
-  }).catch(error => {
-    console.log('Error sending message to DB: ', error);
-  })
-  console.log('msg sent to db');
-  const item = document.createElement('li');
-  item.textContent = msg;
-  messages.appendChild(item);
-  window.scrollTo(0, document.body.scrollHeight);
-})*/
+// START OF - this was also a part of the old code and chat gpt's
 
-let globalOtherUsername = "";   // this is ugly, I'm lazy
 let token = "";
 const form = document.getElementById('form');
 const input = document.getElementById('input');
 const messages = document.getElementById('messages');
 let socket = io()
-const otherUsername = document.getElementById('otherUsername').innerText;
-globalOtherUsername = otherUsername;
+const buttons = document.querySelectorAll(".usernameButton");
+let otherUsername = "";
+let otherUserObject = "";                 // new
+let otherUserSocket = "";                 // new
 //const clickedUser = globalOtherUsername;  // this variable will be set to the user that the currently logged in user wants to chat to
 token = document.cookie.split('; ')
   .find(row => row.startsWith('token='))
@@ -51,14 +33,152 @@ const username = tokenPayload.username; // Extract the username from the payload
 socket.on('connect', () => {
   console.log('frontend connection has run. Token = ', token);
   socket.emit('auth', token);
-  console.log('Connected to the server');
+  displayMessage(`Connected to the server with id: ${socket.id}`);
 })
 
-const getUserAndMessageData = async () => {
+// END OF - this was also a part of the old code and chat gpt's
+// The code below is the third attempt to get this working. I will try to build around the real time messaging
+
+socket.on('receive message', (msg) => {
+  displayMessage(msg);
+})
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const msg = input.value;
+  const room = otherUserSocket;
+  console.log(`${msg} sent to ${room}`)
+  if (msg === "") return;
+  displayMessage(msg);
+  socket.emit('chat message', msg, room);
+  input.value = "";
+})
+
+const displayMessage = (message) => {
+  const li = document.createElement("li");
+  li.textContent = message;
+  document.getElementById('messages').append(li);
+}
+
+buttons.forEach(button => {
+  button.addEventListener("click", async function () {
+    otherUsername = this.innerText;
+    const getMessagesAndOtherUserFromDB = await fetch(`http://localhost:5501/message?otheruser=${otherUsername}`, {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then(response => { return response.json() })     //used for testing purposes
+      .then(data => {
+        otherUserObject = data.otherUserObject;
+        chats = data.chats;
+        console.log(otherUserObject, chats);
+        otherUserSocket = otherUserObject.currentSocketID;
+        console.log(`otherUserSocket equal to = ${otherUserSocket}`)
+      })
+      .catch(error => {
+        console.log("Error retrieving older messages - ", error);
+      })
+  });
+});
+
+// old code
+
+/*const getUserAndMessageData = async () => {
   let otherUserObject = 0;
   let chats = 0;
   console.log('chatWithUser ran');
-  const getMessagesAndOtherUserFromDB = await fetch(`http://localhost:5501/message?otheruser=${globalOtherUsername}`, {
+  const getMessagesAndOtherUserFromDB = await fetch(`http://localhost:5501/message?otheruser=${otherUsername}`, {
+          method: 'GET',
+          headers: {
+          "Content-Type": "application/json"
+        }
+  }).then(response => { return response.json() })     //used for testing purposes
+      .then(data => {
+        otherUserObject = data.otherUserObject;
+        chats = data.chats;
+        console.log(otherUserObject, chats);
+      })
+      .catch(error => {
+        console.log("Error retrieving older messages - ", error);
+      })
+
+    //displayMessages(chats.chats)                             the stuff above this line definitely works
+    if (otherUserObject.currentSocketID == null) {
+      console.log('other user offline');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (input.value) {
+          console.log('otherUser = ', otherUsername);
+          console.log('chatMessage = ', input.value)
+          const sendMsgToDB = await fetch('http://localhost:5501/message', {
+            method: 'POST',
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              otherUser: otherUsername,
+              chatMessage: input.value,
+              sentBy: username       // <--need to figure out how I'm gonna implement this
+            })
+          }).catch(error => {
+            console.log('Error sending message to DB: ', error);
+          })
+          console.log('other user offline - msg sent to db');
+          const item = document.createElement('li');
+          item.textContent = input.value;
+          messages.appendChild(item);
+          window.scrollTo(0, document.body.scrollHeight);
+          input.value = '';
+        }
+      })
+    } else {
+      // need to add more stuff here for rooms
+      console.log('both users online');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (input.value) {
+          //socket.emit('chat message', input.value);
+          let room = otherUserObject.currentSocketID
+          console.log(`${input.value} sent to room name = `, room);
+          socket.emit('chat message', input.value, room);
+          input.value = '';
+        }
+      });
+      //let room = otherUserObject.currentSocketID
+      //console.log('room name = ', room);
+      //socket.emit('join room', room)
+
+      //socket.on('chat message', async (room, msg) => {
+      const sendMsgToDB = await fetch('http://localhost:5501/message', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          otherUser: otherUsername,
+          chatMessage: input.value,
+          sentBy: username // <-- need to figure out how I'm gonna implement this
+        })
+      }).catch(error => {
+        console.log('Error sending message to DB: ', error);
+      })
+      console.log('msg sent to user and db');
+      const item = document.createElement('li');
+      item.textContent = input.value;
+      messages.appendChild(item);
+      window.scrollTo(0, document.body.scrollHeight);
+      //})
+    }
+  } * /
+
+// chat gpt's "fix"
+
+/*const getUserAndMessageData = async () => {
+  let otherUserObject = 0;
+  let chats = 0;
+  console.log('chatWithUser ran');
+  const getMessagesAndOtherUserFromDB = await fetch(`http://localhost:5501/message?otheruser=${otherUsername}`, {
     method: 'GET',
     headers: {
       "Content-Type": "application/json"
@@ -76,10 +196,19 @@ const getUserAndMessageData = async () => {
   //displayMessages(chats.chats)                             the stuff above this line definitely works
   if (otherUserObject.currentSocketID == null) {
     console.log('other user offline');
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (input.value) {
-        console.log('otherUser = ', globalOtherUsername);
+    form.removeEventListener('submit', onSubmitForm);
+    form.addEventListener('submit', onSubmitForm);
+  } else {
+    console.log('both users online');
+    form.removeEventListener('submit', onSubmitForm);
+    form.addEventListener('submit', onSubmitForm);
+  }
+
+  async function onSubmitForm(e) {
+    e.preventDefault();
+    if (input.value) {
+      if (otherUserObject.currentSocketID == null) {
+        console.log('otherUser = ', otherUsername);
         console.log('chatMessage = ', input.value)
         const sendMsgToDB = await fetch('http://localhost:5501/message', {
           method: 'POST',
@@ -87,9 +216,9 @@ const getUserAndMessageData = async () => {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            otherUser: globalOtherUsername,
+            otherUser: otherUsername,
             chatMessage: input.value,
-            sentBy: username       // <--need to figure out how I'm gonna implement this
+            sentBy: username
           })
         }).catch(error => {
           console.log('Error sending message to DB: ', error);
@@ -100,45 +229,24 @@ const getUserAndMessageData = async () => {
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
         input.value = '';
-      }
-    })
-  } else {
-    // need to add more stuff here for rooms
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (input.value) {
-        socket.emit('chat message', input.value);
+      } else {
+        let room = otherUserObject.currentSocketID;
+        console.log(`${input.value} sent to room name = `, room);
+        socket.emit('chat message', input.value, room);
         input.value = '';
       }
-    });
-    let room = otherUserObject.currentSocketID + username;
-    socket.emit('join room', room)
-
-    socket.on('chat message', async (room, msg) => {
-      const sendMsgToDB = await fetch('http://localhost:5501/message', {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          otherUser: otherUsername,
-          chatMessage: msg,
-          sentBy: username // <-- need to figure out how I'm gonna implement this
-        })
-      }).catch(error => {
-        console.log('Error sending message to DB: ', error);
-      })
-      console.log('other user online - msg sent to user and db');
-      const item = document.createElement('li');
-      item.textContent = msg;
-      messages.appendChild(item);
-      window.scrollTo(0, document.body.scrollHeight);
-    })
+    }
   }
-}
+};
 
-const button = document.getElementById('otherUsername');
-button.addEventListener('click', getUserAndMessageData);
 
-// need to add logic for 'rooms' (see https://socket.io/docs/v4/tutorial/api-overview for more details)
+buttons.forEach(button => {
+  button.addEventListener("click", function () {
+    otherUsername = this.innerText;
+    getUserAndMessageData();
+  });
+});
+
+*/
+
 
