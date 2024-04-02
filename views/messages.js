@@ -41,6 +41,7 @@ socket.on('connect', () => {
 
 socket.on('receive message', (msg) => {
   displayMessage(msg);
+
 })
 
 form.addEventListener('submit', e => {
