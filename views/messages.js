@@ -1,3 +1,5 @@
+// This is the messiest file I've ever written, I'm sorry if you try to read all of this code lol
+
 const displayOldMessages = (chatsArray) => {
   let chat = document.getElementById('messages');
   for (let i = 0; i < chatsArray.length; i++) {
@@ -21,6 +23,7 @@ const buttons = document.querySelectorAll(".usernameButton");
 let otherUsername = "";
 let otherUserObject = "";                 // new
 let otherUserSocket = "";                 // new
+let messageCache = [];
 //const clickedUser = globalOtherUsername;  // this variable will be set to the user that the currently logged in user wants to chat to
 token = document.cookie.split('; ')
   .find(row => row.startsWith('token='))
@@ -47,12 +50,22 @@ socket.on('receive message', (msg) => {
 form.addEventListener('submit', e => {
   e.preventDefault();
   const msg = input.value;
-  const room = otherUserSocket;
-  console.log(`${msg} sent to ${room}`)
   if (msg === "") return;
-  displayMessage(msg);
-  socket.emit('chat message', msg, room);
-  input.value = "";
+  if (otherUserSocket === null) {
+    const messageObject = {
+      to: otherUsername,
+      chatMessage: msg,
+      sentBy: username
+    }
+    messageCache.push(messageObject);
+  } else {
+    const room = otherUserSocket;
+    console.log(`${msg} sent to ${room}`)
+    if (msg === "") return;
+    displayMessage(msg);
+    socket.emit('chat message', msg, room);
+    input.value = "";
+  }
 })
 
 const displayMessage = (message) => {
@@ -63,23 +76,29 @@ const displayMessage = (message) => {
 
 buttons.forEach(button => {
   button.addEventListener("click", async function () {
-    otherUsername = this.innerText;
-    const getMessagesAndOtherUserFromDB = await fetch(`http://localhost:5501/message?otheruser=${otherUsername}`, {
-      method: 'GET',
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then(response => { return response.json() })     //used for testing purposes
-      .then(data => {
-        otherUserObject = data.otherUserObject;
-        chats = data.chats;
-        console.log(otherUserObject, chats);
-        otherUserSocket = otherUserObject.currentSocketID;
-        console.log(`otherUserSocket equal to = ${otherUserSocket}`)
-      })
-      .catch(error => {
-        console.log("Error retrieving older messages - ", error);
-      })
+    let currentlyChattingWith = this.innerText;
+    if (currentlyChattingWith !== otherUsername && currentlyChattingWith !== "") {
+      socket.emit('disconnect', otherUserSocket);
+    } else {
+      otherUsername = this.innerText;
+      currentlyChattingWith = otherUsername;
+      const getMessagesAndOtherUserFromDB = await fetch(`http://localhost:5501/message?otheruser=${otherUsername}`, {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).then(response => { return response.json() })     //used for testing purposes
+        .then(data => {
+          otherUserObject = data.otherUserObject;
+          chats = data.chats;
+          console.log(otherUserObject, chats);
+          otherUserSocket = otherUserObject.currentSocketID;
+          console.log(`otherUserSocket equal to = ${otherUserSocket}`)
+        })
+        .catch(error => {
+          console.log("Error retrieving older messages - ", error);
+        })
+    }
   });
 });
 
