@@ -68,15 +68,30 @@ io.on('connect', socket => {
         console.log(`message from ${socket.id} = `, msg);              // for testing purposes
         //io.to(room).emit('chat message', msg);
     })*/
-    socket.on('disconnect', () => {
+    socket.on('disconnect', async () => {
         const removeSocket = async () => {
-            const removeSocketIDfromUser = await User.findOneAndUpdate(
+            /*const removeSocketIDfromUser = await User.findOneAndUpdate(
                 { username },
                 { $set: { currentSocketID: null } }
             )
             console.log(`user with id ${socket.id} has disconnected`);
+        }*/
+            await Promise.all([
+                User.findOneAndUpdate(
+                    { currentSocketID: socket.id },
+                    { $set: { currentSocketID: null } }
+                ),
+                User.findOneAndUpdate(
+                    { currentSocketID: null },
+                    { $set: { currentSocketID: null } }
+                )
+            ]);
         }
-        removeSocket();
+        try {
+            await removeSocket();
+        } catch (err) {
+            console.log('Error removing socket - ', err);
+        }
         console.log('Socket removed from user');
     })
 
