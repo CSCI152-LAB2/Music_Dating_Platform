@@ -18,6 +18,9 @@ const jwt = require('jsonwebtoken');
 
 app.use(cors());
 
+
+app.use(cors());
+
 const server = http.createServer(app);
 const io = socketIO(server);
 
@@ -28,6 +31,7 @@ app.use(express.json()) //parses the data in POST and PUT requests which allows 
 app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static('views'));
+
 
 let username = "";
 let connectionNumber = 0;
@@ -91,6 +95,17 @@ io.on('connect', socket => {
         console.log('Socket removed from user');
     })
 
+let connectionNumber = 0;
+io.on('connection', (socket) => {
+    connectionNumber++;
+    console.log(`user ${connectionNumber} connected`);
+    socket.on('chat message', (msg) => {
+        console.log('message: ', msg);
+        io.emit('chat message', msg);
+    })
+    socket.on('disconnect', () => {
+        console.log(`user has disconnected`);
+    })
     /*socket.on('joinRoom', (room) => {
         socket.join(room);
         socket.emit('message', 'Welcome to the chat');
