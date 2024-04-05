@@ -48,8 +48,8 @@ const userSchema = new Schema({
     profilePic: {
         type: String
     },
-    chats: {
-        type: mongoose.Schema.Types.ObjectId    //might need to implement this on the client side. Will look into it further
+    currentSocketID: {
+        type: String
     }
 })
 

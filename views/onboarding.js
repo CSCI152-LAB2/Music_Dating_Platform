@@ -49,8 +49,6 @@ const onboardingSubmit = () => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    //username: username,
-                    //password: password.value,
                     topGenre: topGenre,
                     sex: getUsersSex,
                     sexualPreference: getUsersSexualPreference,

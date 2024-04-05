@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Socket.IO chat</title>
-    <link rel="stylesheet" href="messages.css">
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="messages.js"></script>
-  </head>
-  <body>
-    <ul id="messages"></ul>
-    <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
-    </form>
-  </body>
-</html>
+
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Socket.IO chat</title>
+  <link rel="stylesheet" href="messages.css">
+</head>
+
+<body>
+  <ul id="userList">
+    <li><button class="usernameButton">testchat1</button></li>
+    <li><button class="usernameButton">testchat3</button></li>
+  </ul>
+  <!-- You can get rid of this but keep the ID. Make sure the other user
+  that the current user is chatting with gets this ID -->
+  <ul id="messages"></ul>
+  <form id="form" action="">
+    <input id="input" autocomplete="off" /><button>Send</button>
+  </form>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="messages.js"></script>
+</body>

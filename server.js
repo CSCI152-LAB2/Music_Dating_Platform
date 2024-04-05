@@ -12,7 +12,11 @@ const session = require('express-session')
 const http = require('http');
 const socketIO = require('socket.io');
 const { verifyCookie } = require('./middlewares/verifyJWT');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const { findOneAndUpdate } = require('./models/ChatModel');
+const jwt = require('jsonwebtoken');
+
+app.use(cors());
 
 
 app.use(cors());
@@ -28,6 +32,69 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static('views'));
 
+
+let username = "";
+let connectionNumber = 0;
+io.on('connect', socket => {
+    connectionNumber++;
+    console.log(`user ${connectionNumber} connected with id: ${socket.id}`);
+    socket.on('auth', async (token) => {
+        const verified_token = jwt.verify(token, process.env.SECRET_STR);
+        ({ username } = verified_token);
+        console.log('authorized connection');
+        console.log('\n\n', username, '\n\n');
+        const addSocketIDtoUser = await User.findOneAndUpdate(
+            { username },
+            { $set: { currentSocketID: socket.id } }
+        )
+        // verified that the socket ID gets sent to the database
+        const userObj = await User.findOne(
+            { username }
+        )
+        console.log(userObj);
+        socket.on('chat message', (msg, room) => {
+            console.log(`message from ${socket.id} to room: ${room} = `, msg);              // for testing purposes
+            socket.to(room).emit('receive message', msg);
+        })
+    })
+
+    /*socket.on('join room', (room) => {
+        socket.join(room);
+        console.log(`${socket.id} joined room ${room}`)
+    })
+
+    socket.on('leave room', (room) => {
+        socket.leave(room);
+        console.log(`${socket.id} left room ${room}`)
+    })*/
+
+    /*socket.on('chat message', (msg) => {
+        console.log(`message from ${socket.id} = `, msg);              // for testing purposes
+        //io.to(room).emit('chat message', msg);
+    })*/
+    socket.on('disconnect', async (room) => {
+        const removeSocket = async () => {
+            await Promise.all([
+                User.findOneAndUpdate(
+                    { currentSocketID: socket.id },
+                    { $set: { currentSocketID: null } }
+                ),
+                User.findOneAndUpdate(
+                    { currentSocketID: null },
+                    { $set: { currentSocketID: null } }
+                )
+            ]);
+            socket.leave(room);
+            console.log(`Socket ${socket.id} left room ${room}`);
+        }
+        try {
+            await removeSocket();
+        } catch (err) {
+            console.log('Error removing socket - ', err);
+        }
+        console.log('Socket removed from user');
+    })
+
 let connectionNumber = 0;
 io.on('connection', (socket) => {
     connectionNumber++;
@@ -39,7 +106,6 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log(`user has disconnected`);
     })
-
     /*socket.on('joinRoom', (room) => {
         socket.join(room);
         socket.emit('message', 'Welcome to the chat');
