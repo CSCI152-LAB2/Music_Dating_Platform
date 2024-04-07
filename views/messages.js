@@ -1,20 +1,5 @@
 
 // This is the messiest file I've ever written, I'm sorry if you try to read all of this code lol
-
-const displayOldMessages = (chatsArray) => {
-  let chat = document.getElementById('messages');
-  for (let i = 0; i < chatsArray.length; i++) {
-    //if (chatsArray[i].sentBy)
-    let oldMessage = document.createElement('li');
-    appendMessage.innerText = chatsArray[i].message;
-    chat.appendChild(oldMessage);
-    // need to add custom CSS for showing the messages sent by the currently logged in user
-    // on the right and the user whose messages they're viewing on the left
-  }
-}
-
-// START OF - this was also a part of the old code and chat gpt's
-
 let token = "";
 const form = document.getElementById('form');
 const input = document.getElementById('input');
@@ -37,52 +22,95 @@ const username = tokenPayload.username; // Extract the username from the payload
 socket.on('connect', () => {
   console.log('frontend connection has run. Token = ', token);
   socket.emit('auth', token);
-  displayMessage(`Connected to the server with id: ${socket.id}`);
+  displayMessage('You ', `connected to the server with id: ${socket.id}`);
 })
 
 // END OF - this was also a part of the old code and chat gpt's
 // The code below is the third attempt to get this working. I will try to build around the real time messaging
 
-socket.on('receive message', (msg) => {
-  displayMessage(msg);
-
+socket.on('receive message', (msg, fromSocket) => {
+  if (fromSocket === otherUserSocket) displayMessage(fromSocket, msg);
 })
 
 form.addEventListener('submit', e => {
   e.preventDefault();
   const msg = input.value;
+  input.value = "";
   if (msg === "") return;
   if (otherUserSocket === null) {
+    displayMessage("you", msg);
     const messageObject = {
       to: otherUsername,
       chatMessage: msg,
       sentBy: username
     }
     messageCache.push(messageObject);
+    messageCache.forEach(chat => { console.log(chat) });
   } else {
-    const room = otherUserSocket;
-    console.log(`${msg} sent to ${room}`)
+    //const room = otherUserSocket;
+    console.log(`${msg} sent to user with socketID: ${otherUserSocket}`)
     if (msg === "") return;
-    displayMessage(msg);
-    socket.emit('chat message', msg, room);
+    displayMessage("you", msg);
+    socket.emit('chat message', msg, otherUserSocket);
     input.value = "";
   }
 })
 
-const displayMessage = (message) => {
+//socket.on('disconnect', async () => {
+const disconnect = async () => {
+  const sendMsgToDB = await fetch('http://localhost:5501/message', {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      otherUsername: otherUsername,
+      chatMessageArray: messageCache,
+      sentBy: username
+    })
+  }).catch(error => {
+    console.log('Error sending message to DB: ', error);
+  })
+  console.log('other user offline - messages sent to db');
+}
+//})
+
+const disconnectButton = document.getElementById('disconnect').addEventListener('click', disconnect);    //for testing purposes
+
+const displayMessage = (from, message) => {
   const li = document.createElement("li");
-  li.textContent = message;
+  li.textContent = `${from}: ${message}`;
   document.getElementById('messages').append(li);
 }
 
 buttons.forEach(button => {
   button.addEventListener("click", async function () {
     let currentlyChattingWith = this.innerText;
-    if (currentlyChattingWith !== otherUsername && currentlyChattingWith !== "") {
-      socket.emit('disconnect', otherUserSocket);
+    if (currentlyChattingWith !== otherUsername && otherUsername !== "") {
+      //socket.emit('leave room', otherUserSocket);
+      document.getElementById('messages').innerHTML = '';
+      const getMessagesAndOtherUserFromDB = await fetch(`http://localhost:5501/message?otheruser=${currentlyChattingWith}`, {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).then(response => { return response.json() })     //used for testing purposes
+        .then(data => {
+          otherUserObject = data.otherUserObject;
+          chatArr = data.chats;
+          console.log('otherUseobject = ', otherUserObject);
+          console.log('chats = ', chatArr);
+          otherUserSocket = otherUserObject.currentSocketID;
+          console.log(`otherUserSocket equal to = ${otherUserSocket}`)
+          displayOldMessages(chatArr);
+        })
+        .catch(error => {
+          console.log("Error retrieving older messages - ", error);
+        })
+      //displayOldMessages(chats)
     } else {
       otherUsername = this.innerText;
-      currentlyChattingWith = otherUsername;
+      //currentlyChattingWith = otherUsername;
       const getMessagesAndOtherUserFromDB = await fetch(`http://localhost:5501/message?otheruser=${otherUsername}`, {
         method: 'GET',
         headers: {
@@ -91,8 +119,8 @@ buttons.forEach(button => {
       }).then(response => { return response.json() })     //used for testing purposes
         .then(data => {
           otherUserObject = data.otherUserObject;
-          chats = data.chats;
-          console.log(otherUserObject, chats);
+          chatArr = data.chats;
+          console.log(otherUserObject, chatArr);
           otherUserSocket = otherUserObject.currentSocketID;
           console.log(`otherUserSocket equal to = ${otherUserSocket}`)
         })
@@ -102,6 +130,22 @@ buttons.forEach(button => {
     }
   });
 });
+
+const displayOldMessages = (chatsArray) => {
+  console.log('displayOldMessages start');
+  let chatList = document.getElementById('messages');
+  for (let i = 0; i < chatsArray.length; i++) {
+    let oldMessage = document.createElement('li');
+    oldMessage.innerText = chatsArray[i].message;
+    if (chatsArray[i].sentBy === otherUsername) {
+      oldMessage.classList.add('message-right'); // Add class for right-aligned message
+    } else {
+      oldMessage.classList.add('message-left'); // Add class for left-aligned message
+    }
+    chatList.appendChild(oldMessage);
+  }
+  console.log('displayOldMessages done');
+}
 
 // old code
 

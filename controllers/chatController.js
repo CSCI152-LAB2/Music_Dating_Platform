@@ -11,7 +11,7 @@ const getUser = async (req, res) => {
 }
 
 const archiveChat = async (req, res) => {
-    const { otherUser, chatMessage, sentBy } = req.body;
+    const { otherUsername, chatMessageArray, sentBy } = req.body;
     const verified_token = jwt.verify(req.cookies.token, process.env.SECRET_STR);
     if (!verified_token) {
         return res.redirect('/login');
@@ -24,36 +24,42 @@ const archiveChat = async (req, res) => {
         { username }
     )
 
-    const otherUserObject = await User.findOne(
+    /*const otherUserObject = await User.findOne(
         { username: otherUser }
-    );
+    );*/
 
-    const messageObj = {
+    /*const messageObj = {
         from: sentBy,
         message: chatMessage
-    }
 
-    console.log('from backend - message = ', chatMessage);       // for testing purposes
-    console.log('current user email is = ', currentUser.email);
-    console.log('otherUser email is = ', otherUserObject.email);
-    let chatName = currentUser.email + otherUserObject.email;
-    console.log('chatName = ', chatName);
+    }*/
 
-    const checkIfChatExists = await Chat.findOne(
-        { chatname: chatName }
-    );
+    console.log('from backend - message = ', chatMessageArray);       // for testing purposes
+    //console.log('current user email is = ', currentUser.email);
+    //console.log('otherUser email is = ', otherUserObject.email);
+    //let chatName = currentUser.email + otherUserObject.email;
+    //console.log('chatName = ', chatName);
+
+    const checkIfChatExists = await Chat.findOne({
+        username,
+        chatsWith: otherUsername
+    });
+
+    console.log('\n\n------------checkIfChatExists------------', checkIfChatExists);
 
     if (checkIfChatExists == null) {
-        sendMsgToDB = await Chat.create(
-            { chatname: chatName },
-            { $push: { chats: messageObj } }
-        )
+        const sendMsgToDB = await Chat.create({
+            username,
+            chatsWith: otherUsername,
+            chats: chatMessageArray
+        })
     } else {
-        let sendMsgToDB = await Chat.findOneAndUpdate(
-            { chatname: chatName },
-            { $push: { chats: messageObj } }
+        const sendMsgToDB = await Chat.findOneAndUpdate(
+            { username, chatsWith: otherUsername },
+            { $push: { chats: { $each: chatMessageArray } } },
+            { new: true }
         )
-        console.log(sendMsgToDB);               // this works but for some reason will not show the most recent message sent
+        console.log('\n\n----------------updated chat model--------------', sendMsgToDB);               // this works but for some reason will not show the most recent message sent
     }
 
     res.status(200).json({ 'Message': 'Succesfully added message to DB' });
@@ -78,9 +84,9 @@ const getChats = async (req, res) => {
             { username: otheruser }
         )
 
-        const chatName = getUserObject.email + getOtherUserObject.email;
+        //const chatName = getUserObject.email + getOtherUserObject.email;
         const findChat = await Chat.findOne(
-            { chatname: chatName }
+            { username, chatsWith: otheruser }
         )
         console.log(findChat);
         const payload = {

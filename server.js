@@ -18,9 +18,6 @@ const jwt = require('jsonwebtoken');
 
 app.use(cors());
 
-
-app.use(cors());
-
 const server = http.createServer(app);
 const io = socketIO(server);
 
@@ -31,7 +28,6 @@ app.use(express.json()) //parses the data in POST and PUT requests which allows 
 app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static('views'));
-
 
 let username = "";
 let connectionNumber = 0;
@@ -54,24 +50,20 @@ io.on('connect', socket => {
         console.log(userObj);
         socket.on('chat message', (msg, room) => {
             console.log(`message from ${socket.id} to room: ${room} = `, msg);              // for testing purposes
-            socket.to(room).emit('receive message', msg);
+            socket.to(room).emit('receive message', msg, userObj.currentSocketID);
         })
     })
 
     /*socket.on('join room', (room) => {
         socket.join(room);
         console.log(`${socket.id} joined room ${room}`)
-    })
+    })*/
 
     socket.on('leave room', (room) => {
         socket.leave(room);
         console.log(`${socket.id} left room ${room}`)
-    })*/
+    })
 
-    /*socket.on('chat message', (msg) => {
-        console.log(`message from ${socket.id} = `, msg);              // for testing purposes
-        //io.to(room).emit('chat message', msg);
-    })*/
     socket.on('disconnect', async (room) => {
         const removeSocket = async () => {
             await Promise.all([
@@ -95,17 +87,6 @@ io.on('connect', socket => {
         console.log('Socket removed from user');
     })
 
-let connectionNumber = 0;
-io.on('connection', (socket) => {
-    connectionNumber++;
-    console.log(`user ${connectionNumber} connected`);
-    socket.on('chat message', (msg) => {
-        console.log('message: ', msg);
-        io.emit('chat message', msg);
-    })
-    socket.on('disconnect', () => {
-        console.log(`user has disconnected`);
-    })
     /*socket.on('joinRoom', (room) => {
         socket.join(room);
         socket.emit('message', 'Welcome to the chat');

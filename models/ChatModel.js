@@ -3,7 +3,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ChatModel = new Schema({
-    chatname: {
+    username: {
+        type: String
+    },
+    chatsWith: {
         type: String
     },
     chats: {
