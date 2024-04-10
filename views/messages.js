@@ -1,4 +1,3 @@
-
 // This is the messiest file I've ever written, I'm sorry if you try to read all of this code lol
 let token = "";
 const form = document.getElementById('form');
