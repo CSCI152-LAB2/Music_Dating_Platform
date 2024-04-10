@@ -15,6 +15,6 @@ router.get('^/$|/message(.html)?otheruser', getChats);
 //router.get('^/$|/message(.html)?', getUser);
 
 router.post('^/$|/message(.html)?', archiveChat);
-router.post('^/$|/message(.html)?', accessChat);
+//router.post('^/$|/message(.html)?', accessChat);
 
 module.exports = router;
